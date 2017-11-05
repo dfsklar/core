@@ -61,6 +61,11 @@ class DispatchRoute
             case Dispatcher::NOT_FOUND:
                 throw new RouteNotFoundException;
             case Dispatcher::METHOD_NOT_ALLOWED:
+                if ($method == "OPTIONS") {
+                   // Always return 200 for pre-flight OPTIONS invocations to ensure we work with modern browsers.
+                   // Make sure your server config (apache, nginx, etc.) returns correct CORS headers!
+                   return $method;  // Not known why this works, but it does!  It ensures return of a 200 error code.
+                }
                 throw new MethodNotAllowedException;
             case Dispatcher::FOUND:
                 $handler = $routeInfo[1];
