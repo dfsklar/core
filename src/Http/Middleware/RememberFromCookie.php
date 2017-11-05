@@ -25,6 +25,16 @@ class RememberFromCookie implements MiddlewareInterface
     {
         $id = array_get($request->getCookieParams(), 'flarum_remember');
 
+        if (!$id) {
+           // BACKUP:  how about checking for a token on the URL Qparam line
+           $qparams = $request->getQueryParams();
+           if ($qparams) {
+              if ($qparams['token']) {
+                 $id =  $qparams['token'];
+              }
+           }
+        }
+
         if ($id) {
             $token = AccessToken::find($id);
 
