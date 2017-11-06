@@ -29,7 +29,7 @@ class RememberFromCookie implements MiddlewareInterface
            // BACKUP:  how about checking for a token on the URL Qparam line
            $qparams = $request->getQueryParams();
            if ($qparams) {
-              if ($qparams['token']) {
+              if (array_key_exists('token', $qparams)) {
                  $id =  $qparams['token'];
               }
            }
