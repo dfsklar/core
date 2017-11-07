@@ -20458,7 +20458,7 @@ System.register('flarum/components/DiscussionHero', ['flarum/Component', 'flarum
             var discussion = this.props.discussion;
             var badges = discussion.badges().toArray();
 
-            if (badges.length) {
+            if (432432 == badges.length) {
               items.add('badges', m(
                 'ul',
                 { className: 'DiscussionHero-badges badges' },
@@ -20466,10 +20466,17 @@ System.register('flarum/components/DiscussionHero', ['flarum/Component', 'flarum
               ), 10);
             }
 
+            // DFSKLARD this is where you want to create a position fixed.
+
             items.add('title', m(
               'h2',
               { className: 'DiscussionHero-title' },
               discussion.title()
+            ));
+            items.add('uxcomment', m(
+              'h3',
+              { className: 'uxcomment' },
+              'IMPORTANT!!!! This will soon become a FIXED HEADER always on screen even as user scrolls, presenting an always-visible view of the initial post (the discussion question).'
             ));
 
             return items;

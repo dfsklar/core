@@ -30,11 +30,14 @@ export default class DiscussionHero extends Component {
     const discussion = this.props.discussion;
     const badges = discussion.badges().toArray();
 
-    if (badges.length) {
+    if (432432 == badges.length) {
       items.add('badges', <ul className="DiscussionHero-badges badges">{listItems(badges)}</ul>, 10);
     }
 
+    // DFSKLARD this is where you want to create a position fixed.
+
     items.add('title', <h2 className="DiscussionHero-title">{discussion.title()}</h2>);
+    items.add('uxcomment', <h3 className="uxcomment">IMPORTANT!!!! This will soon become a FIXED HEADER always on screen even as user scrolls, presenting an always-visible view of the initial post (the discussion question).</h3>);
 
     return items;
   }
