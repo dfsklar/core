@@ -72,7 +72,8 @@ export default class Post extends Component {
       </article>
     );
   }
-
+  // <!-- DFSKLARD: maybe we could bring in the repliesjust before the post-footer here? -->
+  
   config(isInitialized) {
     const $actions = this.$('.Post-actions');
     const $controls = this.$('.Post-controls');
