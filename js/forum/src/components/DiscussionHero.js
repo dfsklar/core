@@ -50,7 +50,7 @@ export default class DiscussionHero extends Component {
         .filter(record => record.type === 'posts' && record.relationships && record.relationships.discussion)
         .map(record => app.store.getById('posts', record.id))
         .sort((a, b) => a.id() - b.id())
-        .slice(0, 2);
+        .slice(0, 1);
     }
 
     // Set up the post stream for this discussion, along with the first page of
@@ -60,15 +60,13 @@ export default class DiscussionHero extends Component {
     // this.stream.goToNumber(m.route.param('near') || (includedPosts[0] && includedPosts[0].number()), true);
 
 
+    // Not sure if I even want any badges here!
     if (432432 == badges.length) {
       items.add('badges', <ul className="DiscussionHero-badges badges">{listItems(badges)}</ul>, 10);
     }
 
-    // DFSKLARD this is where you want to create a position fixed.
-
     items.add('title', <h2 className="DiscussionHero-title">{discussion.title()}</h2>);
-    items.add('posttitle', <p>{this.stream.render()}</p>);
-    items.add('uxcomment', <h3 className="uxcomment">IMPORTANT 3!!!! This will soon become a FIXED HEADER always on screen even as user scrolls, presenting an always-visible view of the initial post (the discussion question).</h3>);
+    items.add('startingpost', <p>{this.stream.render()}</p>);
 
     return items;
   }

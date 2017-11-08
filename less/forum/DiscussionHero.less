@@ -9,12 +9,27 @@
     vertical-align: 2px;
   }
 }
+
+
 .DiscussionHero-items {
   padding: 0;
   margin: 0;
   list-style: none;
 
+  .ReplyPlaceholder {
+    display: none;
+  }
+  .Post-actions, .Post-header, .Post-footer, .PostStream-loadMore {
+    display: none;
+  }
+
+  .CommentPost:not(.Post--hidden), .ReplyPlaceholder {
+    padding: 0px 0px 0px 0px !important;
+    min-height: 0px !important;
+  }
+
   & > li {
+    margin-right: 15px;
     display: inline-block;
   }
 }

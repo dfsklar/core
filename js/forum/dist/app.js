@@ -20413,10 +20413,10 @@ System.register('flarum/components/DiscussionComposer', ['flarum/components/Comp
 });;
 'use strict';
 
-System.register('flarum/components/DiscussionHero', ['flarum/Component', 'flarum/utils/ItemList', 'flarum/helpers/listItems'], function (_export, _context) {
+System.register('flarum/components/DiscussionHero', ['flarum/Component', 'flarum/utils/ItemList', 'flarum/helpers/listItems', 'flarum/components/Page', 'flarum/components/PostStream', 'flarum/components/PostStreamScrubber', 'flarum/components/LoadingIndicator', 'flarum/components/SplitDropdown', 'flarum/utils/DiscussionControls'], function (_export, _context) {
   "use strict";
 
-  var Component, ItemList, listItems, DiscussionHero;
+  var Component, ItemList, listItems, Page, PostStream, PostStreamScrubber, LoadingIndicator, SplitDropdown, DiscussionControls, DiscussionHero;
   return {
     setters: [function (_flarumComponent) {
       Component = _flarumComponent.default;
@@ -20424,6 +20424,18 @@ System.register('flarum/components/DiscussionHero', ['flarum/Component', 'flarum
       ItemList = _flarumUtilsItemList.default;
     }, function (_flarumHelpersListItems) {
       listItems = _flarumHelpersListItems.default;
+    }, function (_flarumComponentsPage) {
+      Page = _flarumComponentsPage.default;
+    }, function (_flarumComponentsPostStream) {
+      PostStream = _flarumComponentsPostStream.default;
+    }, function (_flarumComponentsPostStreamScrubber) {
+      PostStreamScrubber = _flarumComponentsPostStreamScrubber.default;
+    }, function (_flarumComponentsLoadingIndicator) {
+      LoadingIndicator = _flarumComponentsLoadingIndicator.default;
+    }, function (_flarumComponentsSplitDropdown) {
+      SplitDropdown = _flarumComponentsSplitDropdown.default;
+    }, function (_flarumUtilsDiscussionControls) {
+      DiscussionControls = _flarumUtilsDiscussionControls.default;
     }],
     execute: function () {
       DiscussionHero = function (_Component) {
@@ -20456,8 +20468,35 @@ System.register('flarum/components/DiscussionHero', ['flarum/Component', 'flarum
           value: function items() {
             var items = new ItemList();
             var discussion = this.props.discussion;
+            var startPost = discussion.startPost();
             var badges = discussion.badges().toArray();
 
+            // When the API responds with a discussion, it will also include a number of
+            // posts. Some of these posts are included because they are on the first
+            // page of posts we want to display (determined by the `near` parameter) –
+            // others may be included because due to other relationships introduced by
+            // extensions. We need to distinguish the two so we don't end up displaying
+            // the wrong posts. We do so by filtering out the posts that don't have
+            // the 'discussion' relationship linked, then sorting and splicing.
+            var includedPosts = [];
+            if (discussion.payload && discussion.payload.included) {
+              includedPosts = discussion.payload.included.filter(function (record) {
+                return record.type === 'posts' && record.relationships && record.relationships.discussion;
+              }).map(function (record) {
+                return app.store.getById('posts', record.id);
+              }).sort(function (a, b) {
+                return a.id() - b.id();
+              }).slice(0, 1);
+            }
+
+            // Set up the post stream for this discussion, along with the first page of
+            // posts we want to display. Tell the stream to scroll down and highlight
+            // the specific post that was routed to.
+            this.stream = new PostStream({ discussion: discussion, includedPosts: includedPosts });
+            // this.stream.goToNumber(m.route.param('near') || (includedPosts[0] && includedPosts[0].number()), true);
+
+
+            // Not sure if I even want any badges here!
             if (432432 == badges.length) {
               items.add('badges', m(
                 'ul',
@@ -20466,17 +20505,15 @@ System.register('flarum/components/DiscussionHero', ['flarum/Component', 'flarum
               ), 10);
             }
 
-            // DFSKLARD this is where you want to create a position fixed.
-
             items.add('title', m(
               'h2',
               { className: 'DiscussionHero-title' },
               discussion.title()
             ));
-            items.add('uxcomment', m(
-              'h3',
-              { className: 'uxcomment' },
-              'IMPORTANT!!!! This will soon become a FIXED HEADER always on screen even as user scrolls, presenting an always-visible view of the initial post (the discussion question).'
+            items.add('startingpost', m(
+              'p',
+              null,
+              this.stream.render()
             ));
 
             return items;
