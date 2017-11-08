@@ -183,6 +183,7 @@ export default class IndexPage extends Page {
     const items = new ItemList();
     const params = this.stickyParams();
 
+    /*
     items.add('allDiscussions',
       LinkButton.component({
         href: app.route('index', params),
@@ -191,7 +192,8 @@ export default class IndexPage extends Page {
       }),
       100
     );
-
+    */
+    
     return items;
   }
 
