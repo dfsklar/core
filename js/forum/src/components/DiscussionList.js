@@ -63,6 +63,10 @@ export default class DiscussionList extends Component {
 
     return (
       <div className="DiscussionList">
+        <div className="uxcomment">This will be filtered to show only this GROUP's threads!</div>
+        <div className="uxcomment">But it might be nice to provide some UI element for jumping up a level and getting to a list of groups!</div>
+        <div className="uxcomment">ALSO: on wide screens, we should just do what Lou would like: keep this drawer "open" so you're always seeing the full list of discussions in this group even as you read this thread.</div>
+        <div className="uxcomment">EVEN MORE IMPORTANT: this list of threads should show the text of the DQ (first post in the thread)!  That's much more important than the useless info "Question #5"!</div>
         <ul className="DiscussionList-discussions">
           {this.discussions.map(discussion => {
             return (

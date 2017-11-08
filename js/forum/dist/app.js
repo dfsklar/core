@@ -20608,6 +20608,26 @@ System.register('flarum/components/DiscussionList', ['flarum/Component', 'flarum
               'div',
               { className: 'DiscussionList' },
               m(
+                'div',
+                { className: 'uxcomment' },
+                'This will be filtered to show only this GROUP\'s threads!'
+              ),
+              m(
+                'div',
+                { className: 'uxcomment' },
+                'But it might be nice to provide some UI element for jumping up a level and getting to a list of groups!'
+              ),
+              m(
+                'div',
+                { className: 'uxcomment' },
+                'ALSO: on wide screens, we should just do what Lou would like: keep this drawer "open" so you\'re always seeing the full list of discussions in this group even as you read this thread.'
+              ),
+              m(
+                'div',
+                { className: 'uxcomment' },
+                'EVEN MORE IMPORTANT: this list of threads should show the text of the DQ (first post in the thread)!  That\'s much more important than the useless info "Question #5"!'
+              ),
+              m(
                 'ul',
                 { className: 'DiscussionList-discussions' },
                 this.discussions.map(function (discussion) {
@@ -22699,11 +22719,16 @@ System.register('flarum/components/IndexPage', ['flarum/extend', 'flarum/compone
             var items = new ItemList();
             var params = this.stickyParams();
 
-            items.add('allDiscussions', LinkButton.component({
-              href: app.route('index', params),
-              children: app.translator.trans('core.forum.index.all_discussions_link'),
-              icon: 'comments-o'
-            }), 100);
+            /*
+            items.add('allDiscussions',
+              LinkButton.component({
+                href: app.route('index', params),
+                children: app.translator.trans('core.forum.index.all_discussions_link'),
+                icon: 'comments-o'
+              }),
+              100
+            );
+            */
 
             return items;
           }
