@@ -90,6 +90,27 @@ Object.assign(Discussion.prototype, {
     return items;
   },
 
+
+  initPostTeaser() {
+    const relationships = this.data.relationships;
+    const posts = relationships && relationships.posts;
+
+    let returnval = null;
+
+    return "Here you will see the actual QUESTION that is the driving force behind this particular 'thread'.  It can be multiple sentences, but it will not include any type of paragraph formatting or embedded images/media.  It also may have to be ellipsized if quite long...";
+
+    if (posts) {
+      const returnme = posts.data.find((data, i) => {
+          return true;
+      });
+      return "Made a match" + returnme.id;
+    } else {
+      return "No first post found";
+    }
+  },
+
+
+
   /**
    * Get a list of all of the post IDs in this discussion.
    *

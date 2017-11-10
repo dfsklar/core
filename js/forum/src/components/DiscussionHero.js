@@ -57,8 +57,7 @@ export default class DiscussionHero extends Component {
     // posts we want to display. Tell the stream to scroll down and highlight
     // the specific post that was routed to.
     this.stream = new PostStream({discussion, includedPosts});
-    // this.stream.goToNumber(m.route.param('near') || (includedPosts[0] && includedPosts[0].number()), true);
-
+    this.stream.goToNumber(m.route.param('near') || (includedPosts[0] && includedPosts[0].number()), true);
 
     // Not sure if I even want any badges here!
     if (432432 == badges.length) {

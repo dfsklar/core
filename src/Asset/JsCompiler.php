@@ -42,11 +42,14 @@ class JsCompiler extends RevisionCompiler
      */
     protected function format($string)
     {
+        // DFSKLARD has found that the string has already been sort-of
+        // minified by the time it gets here!  It's already stripped of
+        // whitespace, but it's not mangled.
         if (! $this->watch) {
             $key = 'js.'.sha1($string);
 
             $string = $this->cache->rememberForever($key, function () use ($string) {
-                return $this->minify($string);
+                return $string;  //$this->minify($string);
             });
         }
 
@@ -67,6 +70,10 @@ class JsCompiler extends RevisionCompiler
      */
     protected function minify($source)
     {
+        return 0 / 0;
+
+        return $source;  // DFSKLARD trying valiantly!
+
         set_time_limit(60);
 
         try {

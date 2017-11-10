@@ -25,7 +25,13 @@
 @import "UserPage.less";
 
 .Dropdown-menu {
-    .item-following, .item-tags, .item-allDiscussions {
+    .item-following, .item-tags, .item-allDiscussions, .item-subscription {
+        display: none !important;
+    }
+}
+
+.DiscussionPage-nav {
+    .item-subscription {
         display: none !important;
     }
 }
@@ -36,6 +42,17 @@
     }
 }
 
+.App-navigation {
+    .App-drawer {
+        display: none !important;
+    }
+}
+
+.App-drawer {
+    .Navigation-pin {
+        display: none !important;
+    }
+}
 .uxcomment {
     color: red;
     background-color: yellow;
@@ -43,4 +60,8 @@
     padding-left: 3px;
     padding-right: 3px;
     padding-bottom: 5px;
+}
+
+span.Avatar {
+    display: none !important;
 }

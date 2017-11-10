@@ -28,7 +28,8 @@ export default class Pane {
      * @type {Boolean}
      * @protected
      */
-    this.pinned = localStorage.getItem(this.pinnedKey) === 'true';
+    // DFSKLARD disabling
+    this.pinned = false; // localStorage.getItem(this.pinnedKey) === 'true';
 
     /**
      * Whether or not the pane is currently exists.
@@ -56,6 +57,7 @@ export default class Pane {
    * @public
    */
   enable() {
+    return; //DFSKLARD disabling
     this.active = true;
     this.render();
   }
@@ -77,6 +79,7 @@ export default class Pane {
    * @public
    */
   show() {
+    return;  //DFSKLARD disabling
     clearTimeout(this.hideTimeout);
     this.showing = true;
     this.render();
@@ -108,6 +111,10 @@ export default class Pane {
    * @public
    */
   togglePinned() {
+    this.pinned = false;
+    return;  // DFSKLARD disabling
+
+
     this.pinned = !this.pinned;
 
     localStorage.setItem(this.pinnedKey, this.pinned ? 'true' : 'false');

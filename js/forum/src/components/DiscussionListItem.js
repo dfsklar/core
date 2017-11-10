@@ -101,6 +101,7 @@ export default class DiscussionListItem extends Component {
             config={m.route}
             className="DiscussionListItem-main">
             <h3 className="DiscussionListItem-title">{highlight(discussion.title(), this.props.params.q)}</h3>
+            <h4 className="DiscussionListItem-initpostteaser">{discussion.initPostTeaser()}</h4>
             <ul className="DiscussionListItem-info">{listItems(this.infoItems().toArray())}</ul>
           </a>
 
