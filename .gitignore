@@ -1,3 +1,4 @@
+js/*/dist/app.js
 /vendor
 composer.phar
 .DS_Store
