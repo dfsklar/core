@@ -42,6 +42,8 @@ export default class DiscussionList extends Component {
     const params = this.props.params;
     let loading;
 
+    const canStartDiscussion = app.forum.attribute('canStartDiscussion') || !app.session.user;
+
     if (this.loading) {
       loading = LoadingIndicator.component();
     } else if (this.moreResults) {
@@ -52,11 +54,22 @@ export default class DiscussionList extends Component {
       });
     }
 
+    let button_newDiscussion = 
+      Button.component({
+        children: [ <span>+</span> ],
+        icon: 'edit',
+        className: 'Button Button--primary IndexPage-newDiscussion',
+        itemClassName: 'App-primaryControl',
+        // xxxxonclick: this.newDiscussion.bind(this),
+        disabled: !canStartDiscussion
+      })
+
     if (this.discussions.length === 0 && !this.loading) {
       const text = app.translator.trans('core.forum.discussion_list.empty_text');
       return (
         <div className="DiscussionList">
           {Placeholder.component({text})}
+          {button_newDiscussion}
         </div>
       );
     }
@@ -75,6 +88,7 @@ export default class DiscussionList extends Component {
         <div className="DiscussionList-loadMore">
           {loading}
         </div>
+        {button_newDiscussion}
       </div>
     );
   }
