@@ -48,24 +48,31 @@ export default class DiscussionHero extends Component {
     if (discussion.payload && discussion.payload.included) {
       includedPosts = discussion.payload.included
         .filter(record => record.type === 'posts' && record.relationships && record.relationships.discussion)
-        .map(record => app.store.getById('posts', record.id))
-        .sort((a, b) => a.id() - b.id())
+        .map(record => app.store.getById('posts', record.id))    // map this into the actual POST object
+        .sort((a, b) => a.id() - b.id())  // Obtain the post with the minimum ID
         .slice(0, 1);
     }
 
-    // Set up the post stream for this discussion, along with the first page of
-    // posts we want to display. Tell the stream to scroll down and highlight
-    // the specific post that was routed to.
-    this.stream = new PostStream({discussion, includedPosts});
-    this.stream.goToNumber(m.route.param('near') || (includedPosts[0] && includedPosts[0].number()), true);
+    // NOW we have the first post:
+    // includedPosts[0].data.attributes.contentHtml
+    //                                 .time
+    //                      .relationships.user.data.id ===> ID# of the user who posted it
+    // app.store.getById('users', THATUSERID)  ==> xxxx.data.attributes.displayName  ==> "nickname of the person who posted it!"
 
     // Not sure if I even want any badges here!
     if (432432 == badges.length) {
       items.add('badges', <ul className="DiscussionHero-badges badges">{listItems(badges)}</ul>, 10);
     }
 
+    const startingPostUserID = includedPosts[0].data.relationships.user.data.id;
+    const startingPostUserName = app.store.getById('users', startingPostUserID).data.attributes.displayName;
+
     items.add('title', <h2 className="DiscussionHero-title">{discussion.title()}</h2>);
-    items.add('startingpost', <p>{this.stream.render()}</p>);
+    items.add('author', <div className="DiscussionHero-author">{startingPostUserName}</div>);
+    items.add('startingpost', 
+       <div className="DiscussionHero-StartingPost">
+           {includedPosts[0].data.attributes.contentHtml}
+       </div>);
 
     return items;
   }
