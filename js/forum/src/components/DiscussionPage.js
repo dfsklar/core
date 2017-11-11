@@ -85,6 +85,14 @@ export default class DiscussionPage extends Page {
     }
   }
 
+
+
+  /* 
+  DFSKLARD: Note that this view() method is only returning the content to be placed in
+  the outer framework's <DIV id='content'> element.  The dressing around this is
+  found in: 
+  */
+
   view() {
     const discussion = this.discussion;
 

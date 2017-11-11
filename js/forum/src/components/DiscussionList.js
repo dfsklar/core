@@ -13,6 +13,7 @@ import Placeholder from 'flarum/components/Placeholder';
  *   to send along in the API request to get discussion results.
  */
 export default class DiscussionList extends Component {
+
   init() {
     /**
      * Whether or not discussion results are loading.
@@ -20,6 +21,10 @@ export default class DiscussionList extends Component {
      * @type {Boolean}
      */
     this.loading = true;
+
+    // DFSKLARD: bizarre technique for giving this the ability to call a method
+    // on its parent IndexPage component
+    this.parentIndexPage = null;
 
     /**
      * Whether or not there are more results that can be loaded.
@@ -60,7 +65,7 @@ export default class DiscussionList extends Component {
         icon: 'edit',
         className: 'Button Button--primary IndexPage-newDiscussion',
         itemClassName: 'App-primaryControl',
-        // xxxxonclick: this.newDiscussion.bind(this),
+        onclick: this.parentIndexPage.newDiscussion.bind(this.parentIndexPage),
         disabled: !canStartDiscussion
       })
 

@@ -21,6 +21,7 @@ export default class Navigation extends Component {
   view() {
     const {history, pane} = app;
 
+    // DFSKLARD: Here we have the upper-left-corner "back" navigation button ("<<<<")
     return (
       <div className={'Navigation ButtonGroup ' + (this.props.className || '')}
         onmouseenter={pane && pane.show.bind(pane)}

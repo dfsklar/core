@@ -93,20 +93,10 @@ Object.assign(Discussion.prototype, {
 
   initPostTeaser() {
     const relationships = this.data.relationships;
-    const posts = relationships && relationships.posts;
 
-    let returnval = null;
-
-    return "Here you will see the actual QUESTION that is the driving force behind this particular 'thread'.  It can be multiple sentences, but it will not include any type of paragraph formatting or embedded images/media.  It also may have to be ellipsized if quite long...";
-
-    if (posts) {
-      const returnme = posts.data.find((data, i) => {
-          return true;
-      });
-      return "Made a match" + returnme.id;
-    } else {
-      return "No first post found";
-    }
+    const post = app.store.getById('posts', relationships.startPost.data.id);
+    
+    return post.data.attributes.content;
   },
 
 
