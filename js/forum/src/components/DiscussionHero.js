@@ -64,6 +64,7 @@ export default class DiscussionHero extends Component {
       items.add('badges', <ul className="DiscussionHero-badges badges">{listItems(badges)}</ul>, 10);
     }
 
+    // DFSKLARD: This is how I learned how to use the app.store and the .relationships. properties.
     const startingPostUserID = includedPosts[0].data.relationships.user.data.id;
     const startingPostUserName = app.store.getById('users', startingPostUserID).data.attributes.displayName;
 
@@ -73,6 +74,13 @@ export default class DiscussionHero extends Component {
        <div className="DiscussionHero-StartingPost">
            {includedPosts[0].data.attributes.contentHtml}
        </div>);
+    items.add('controls', 
+      SplitDropdown.component({
+        children: DiscussionControls.controls(discussion, this).toArray(),
+        icon: 'ellipsis-v',
+        className: 'App-primaryControl',
+        buttonClassName: 'Button--primary'
+        }));
 
     return items;
   }

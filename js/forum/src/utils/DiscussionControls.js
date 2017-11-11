@@ -1,4 +1,5 @@
 import DiscussionPage from 'flarum/components/DiscussionPage';
+import DiscussionHero from 'flarum/components/DiscussionHero';
 import ReplyComposer from 'flarum/components/ReplyComposer';
 import LogInModal from 'flarum/components/LogInModal';
 import Button from 'flarum/components/Button';
@@ -14,6 +15,8 @@ import extractText from 'flarum/utils/extractText';
 export default {
   /**
    * Get a list of controls for a discussion.
+   * 
+   * DFSKLARD: A DiscussionHero context should show only one button: REPLY
    *
    * @param {Discussion} discussion
    * @param {*} context The parent component under which the controls menu will
@@ -24,14 +27,15 @@ export default {
   controls(discussion, context) {
     const items = new ItemList();
 
-    ['user', 'moderation', 'destructive'].forEach(section => {
-      const controls = this[section + 'Controls'](discussion, context).toArray();
-      if (controls.length) {
-        controls.forEach(item => items.add(item.itemName, item));
-        items.add(section + 'Separator', Separator.component());
-      }
-    });
-
+    const sections = 
+        (context instanceof DiscussionHero) ? ['user'] : ['user', 'moderation', 'destructive'];
+    sections.forEach(section => {
+        const controls = this[section + 'Controls'](discussion, context).toArray();
+        if (controls.length) {
+          controls.forEach(item => items.add(item.itemName, item));
+          items.add(section + 'Separator', Separator.component());
+        }
+      });
     return items;
   },
 
@@ -51,9 +55,9 @@ export default {
     // Only add a reply control if this is the discussion's controls dropdown
     // for the discussion page itself. We don't want it to show up for
     // discussions in the discussion list, etc.
-    if (context instanceof DiscussionPage) {
+    if ( (context instanceof DiscussionPage) || (context instanceof DiscussionHero))  {
       items.add('reply',
-        !app.session.user || discussion.canReply()
+        (!app.session.user || discussion.canReply())
           ? Button.component({
             icon: 'reply',
             children: app.translator.trans(app.session.user ? 'core.forum.discussion_controls.reply_button' : 'core.forum.discussion_controls.log_in_to_reply_button'),
