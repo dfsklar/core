@@ -38,6 +38,33 @@ export default class IndexPage extends Page {
 
     const params = this.params();
 
+
+    // DFSKLARD: experiment with catching a situation requiring re-routing early.
+    // If this is a display of a GROUP (i.e. top-level tag), reroute to
+    // one of its SESSIONS (secondary-level tag).
+    if (params.tags) {
+      var current_tag = app.store.getBy('tags', 'slug', params.tags);
+      if (current_tag) {
+        if ( ! (current_tag.data.attributes.isChild)) {
+          // SO: we have a situation where we want to reroute to the "latest-added"
+          // subchild of this tag.
+          // How to find subtags?
+          const children = app.store.all('tags').filter(child => child.parent() === current_tag);          
+          // 
+          if (children) {
+            if (children.length > 0) {
+              const latest_child = children[children.length-1];
+              // FAILURE 1:  app.route.tag(...)
+              m.route(app.route.tag(latest_child));
+              return;
+            }
+          }
+        }
+      }
+    }
+
+
+
     if (app.cache.discussionList) {
       // Compare the requested parameters (sort, search query) to the ones that
       // are currently present in the cached discussion list. If they differ, we
