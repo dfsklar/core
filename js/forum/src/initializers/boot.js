@@ -22,6 +22,11 @@ export default function boot(app) {
   // Push the homepage as the first route, so that the user will always be
   // able to click on the 'back' button to go home, regardless of which page
   // they started on.
+
+  // DFSKLARD: This is truly called only once, when the SPA is loaded.  NOT called when routes change within the SPA.
+
+  // DFSKLARD: This is where the homepage is being set up as the initial route as a default for the BACK button.
+
   const defaultRoute = app.forum.attribute('defaultRoute');
   let defaultAction = 'index';
 

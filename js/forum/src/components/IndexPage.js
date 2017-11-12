@@ -42,7 +42,13 @@ export default class IndexPage extends Page {
     // DFSKLARD: experiment with catching a situation requiring re-routing early.
     // If this is a display of a GROUP (i.e. top-level tag), reroute to
     // one of its SESSIONS (secondary-level tag).
-    if (params.tags) {
+    if (!(params.tags)) {
+      // If no tags at all, the user hasn't even chosen a GROUP to dive into.
+      // We are thus going to lead them to the list of groups!
+      m.route(app.route('tags'));
+      return;
+    }
+    else {
       var current_tag = app.store.getBy('tags', 'slug', params.tags);
       if (current_tag) {
         if ( ! (current_tag.data.attributes.isChild)) {
