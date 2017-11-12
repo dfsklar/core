@@ -72,7 +72,7 @@ export default class DiscussionHero extends Component {
     items.add('author', <div className="DiscussionHero-author">{startingPostUserName}</div>);
     items.add('startingpost', 
        <div className="DiscussionHero-StartingPost">
-           {includedPosts[0].data.attributes.contentHtml}
+           {m.trust(includedPosts[0].data.attributes.contentHtml)}
        </div>);
     items.add('controls', 
       SplitDropdown.component({
