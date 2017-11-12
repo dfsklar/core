@@ -202,7 +202,8 @@ class PostStream extends Component {
 
     const items = posts.map((post, i) => {
       let content;
-      const attrs = {'data-index': this.visibleStart + i};
+      const dataIndex = this.visibleStart + i;
+      const attrs = {'data-index': dataIndex};
 
       if (post) {
         const time = post.time();
@@ -237,8 +238,11 @@ class PostStream extends Component {
         content = PostLoading.component();
       }
 
-      return <div className="PostStream-item" {...attrs}>{content}</div>;
+      // DFSKLARD added a class name that has the INDEX so we can do CSS manipulation based on index.
+      return <div className={"PostStream-item PostStream-item-"+String(dataIndex)} {...attrs}>{content}</div>;
     });
+    // END OF: const items = ...
+
 
     if (!this.viewingEnd && posts[this.visibleEnd - this.visibleStart - 1]) {
       items.push(
