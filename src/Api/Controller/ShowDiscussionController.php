@@ -78,6 +78,12 @@ class ShowDiscussionController extends AbstractResourceController
 
         $discussion = $this->discussions->findOrFail($discussionId, $actor);
 
+        // DFSKLARD:  This is a prototype!  I am FORCING this user to FOLLOW this discussion!
+        $state = $discussion->stateFor($actor);
+        $actor = $request->getAttribute('actor');
+        $state->subscription = 'follow';
+        $state->save();
+
         if (in_array('posts', $include)) {
             $postRelationships = $this->getPostRelationships($include);
 
