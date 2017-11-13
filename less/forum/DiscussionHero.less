@@ -35,14 +35,27 @@
 
   & > li.item-controls {
       position: absolute;
-      right: -80px;
+      right: 0px;
       top: 0px;
     
   }
 }
 
 
-.DiscussionHero-title {
+.DiscussionHero-author {
+  &:before {
+    content: "Posted by ";
+  }
+}
+
+.DiscussionHero-StartingPost {
+  margin-top: 8px;
+  font-size: 18px;
+}
+
+h2.DiscussionHero-title {
   display: inline;
   vertical-align: middle;
+  font-size: 15px;
+  font-weight: bold;
 }

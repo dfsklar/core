@@ -6,6 +6,27 @@
   }
 }
 
+
+.DiscussionPage-FormFactorNotSupported {
+  display: block;
+  padding: 20px;
+  font-size: 24px;
+  color: red;
+}
+.DiscussionPage {
+  display: none;
+}
+
+@media @desktop-hd {
+  .DiscussionPage-FormFactorNotSupported {
+    display: none;
+  }
+  .DiscussionPage {
+    display: block;
+  }
+}
+
+
 @media @phone {
   .DiscussionPage-nav {
     margin: 0 -15px;

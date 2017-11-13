@@ -97,6 +97,13 @@ export default class DiscussionPage extends Page {
     const discussion = this.discussion;
 
     return (
+    <div className="DiscussionPage-Supercontainer">
+      <div className="DiscussionPage-FormFactorNotSupported">
+        Sorry but this page does not yet support narrow-width form factors.
+        Use a laptop/desktop computer and use a wide screen width to expose
+        this page's UX.
+      </div>
+
       <div className="DiscussionPage">
         {app.cache.discussionList
           ? <div className="DiscussionPage-list" config={this.configPane.bind(this)}>
@@ -120,6 +127,7 @@ export default class DiscussionPage extends Page {
             : LoadingIndicator.component({className: 'LoadingIndicator--block'})}
         </div>
       </div>
+    </div>
     );
   }
 

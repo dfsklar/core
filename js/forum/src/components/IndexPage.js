@@ -104,6 +104,12 @@ export default class IndexPage extends Page {
 
   view() {
     return (
+    <div className="IndexPage-Supercontainer">
+      <div className="IndexPage-FormFactorNotSupported">
+        Sorry but this page does not yet support narrow-width form factors.
+        Use a laptop/desktop computer and use a wide screen width to expose
+        this page's UX.
+      </div>
       <div className="IndexPage">
         {this.hero()}
         <div className="container">
@@ -119,6 +125,7 @@ export default class IndexPage extends Page {
           </div>
         </div>
       </div>
+    </div>
     );
   }
 

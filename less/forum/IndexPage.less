@@ -11,6 +11,29 @@
   }
 }
 
+
+.IndexPage-FormFactorNotSupported {
+  display: block;
+  padding: 20px;
+  font-size: 24px;
+  color: red;
+}
+.IndexPage {
+  display: none;
+}
+
+@media @desktop-hd {
+  .IndexPage-FormFactorNotSupported {
+    display: none;
+  }
+  .IndexPage {
+    display: block;
+  }
+}
+
+
+
+
 // ------------------------------------
 // Results
 
