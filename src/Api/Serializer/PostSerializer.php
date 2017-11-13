@@ -45,9 +45,10 @@ class PostSerializer extends PostBasicSerializer
         if ($post instanceof CommentPost) {
             $attributes['contentHtml'] = $post->content_html;
 
-            if ($canEdit) {
+	    // DFSKLARD always wants the content to be available so we can show "post teasers".
+            //if ($canEdit || true) {
                 $attributes['content'] = $post->content;
-            }
+            //}
             if ($gate->allows('viewIps', $post)) {
                 $attributes['ipAddress'] = $post->ip_address;
             }
