@@ -82,6 +82,20 @@ class UserRepository
     }
 
     /**
+     * Get the ID of a user with the given UUID ("uid").
+     *
+     * @param string $uid
+     * @param User|null $actor
+     * @return int|null
+     */
+    public function getIdForUID($uid, User $actor = null)
+    {
+        $query = User::where('uid', '=', $uid);
+
+        return $this->scopeVisibleTo($query, $actor)->value('id');
+    }
+
+    /**
      * Find users by matching a string of words against their username,
      * optionally making sure they are visible to a certain user.
      *

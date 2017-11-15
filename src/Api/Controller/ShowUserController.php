@@ -48,7 +48,14 @@ class ShowUserController extends AbstractResourceController
         $id = array_get($request->getQueryParams(), 'id');
 
         if (! is_numeric($id)) {
-            $id = $this->users->getIdForUsername($id);
+            $testid = $this->users->getIdForUsername($id);
+            if (! $testid) {
+                // Last resort: it might be a UUID.
+                // DFSKLARD: long-range todo: we should use a U- protocol just in case
+                // we run into a UUID that has no hex A-F chars and thus looks numeric!
+                $testid = $this->users->getIdForUID($id);
+            }
+            $id = $testid;
         }
 
         $actor = $request->getAttribute('actor');
