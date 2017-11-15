@@ -29,6 +29,7 @@ class UserRepository
     /**
      * Find a user by ID, optionally making sure it is visible to a certain
      * user, or throw an exception.
+     * DFSKLARD ADDED support for lookup by UID as a backup.
      *
      * @param int $id
      * @param User $actor
@@ -39,9 +40,12 @@ class UserRepository
     public function findOrFail($id, User $actor = null)
     {
         $query = User::where('id', $id);
-
+        if (! $query->first()) {
+            $query = User::where('uid', $id);
+        }
         return $this->scopeVisibleTo($query, $actor)->firstOrFail();
     }
+
 
     /**
      * Find a user by an identification (username or email).
