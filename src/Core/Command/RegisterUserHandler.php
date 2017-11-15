@@ -87,16 +87,16 @@ class RegisterUserHandler
         $username = array_get($data, 'attributes.username');
         $email = array_get($data, 'attributes.email');
         $password = array_get($data, 'attributes.password');
-
+        $uid = array_get($data, 'attributes.uid');   // DFSKLARD addition
+        
         // If a valid authentication token was provided as an attribute,
         // then we won't require the user to choose a password.
         if (isset($data['attributes']['token'])) {
             $token = AuthToken::validOrFail($data['attributes']['token']);
-
             $password = $password ?: str_random(20);
         }
 
-        $user = User::register($username, $email, $password);
+        $user = User::register($username, $uid, $email, $password);
 
         // If a valid authentication token was provided, then we will assign
         // the attributes associated with it to the user's account. If this

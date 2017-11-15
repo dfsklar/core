@@ -51,6 +51,9 @@ class ForumServiceProvider extends AbstractServiceProvider
 
     /**
      * Populate the forum client routes.
+     * 
+     * DFSKLARD: The FORUM ROUTES recognized by the PHP side of the fence.
+     * An entry to the SPA MUST use one of these routes!
      *
      * @param RouteCollection $routes
      */

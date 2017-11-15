@@ -36,6 +36,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * @property int $id
+ * @property string $uid
  * @property string $username
  * @property string $email
  * @property bool $is_activated
@@ -151,17 +152,19 @@ class User extends AbstractModel
 
     /**
      * Register a new user.
+     * DFSKLARD: Added $uid new required static-once-registered user field.
      *
      * @param string $username
      * @param string $email
      * @param string $password
      * @return static
      */
-    public static function register($username, $email, $password)
+    public static function register($username, $uid, $email, $password)
     {
         $user = new static;
 
         $user->username = $username;
+        $user->uid = $uid;
         $user->email = $email;
         $user->password = $password;
         $user->join_time = time();

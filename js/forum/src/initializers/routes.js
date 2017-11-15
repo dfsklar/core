@@ -7,6 +7,8 @@ import NotificationsPage from 'flarum/components/NotificationsPage';
 
 /**
  * The `routes` initializer defines the forum app's routes.
+ * 
+ * DFSKLARD: The ROUTES initializer!!
  *
  * @param {App} app
  */

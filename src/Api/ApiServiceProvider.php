@@ -95,6 +95,8 @@ class ApiServiceProvider extends AbstractServiceProvider
 
     /**
      * Populate the API routes.
+     * 
+     * DFSKLARD: The ROUTES for the API on the PHP side of the world.
      *
      * @param RouteCollection $routes
      */
@@ -136,14 +138,88 @@ class ApiServiceProvider extends AbstractServiceProvider
             $route->toController(Controller\ListUsersController::class)
         );
 
+
         // Register a user
+        // POST: /api/users
+        // Body: { data: { attributes: {
+        //          uid:
+        //          username: 
+        //          email:
+        //          password:
+        //       }}
+        // Error response:  code 422 if missing required fields
         $routes->post(
             '/users',
             'users.create',
             $route->toController(Controller\CreateUserController::class)
         );
 
-        // Get a single user
+        
+        // Get all info about a single user
+        /*
+        Actual sample result:
+        {
+    "data": {
+        "type": "users",
+        "id": "2",
+        "attributes": {
+            "username": "sklard",
+            "displayName": "sklard",
+            "avatarUrl": null,
+            "joinTime": "2017-11-12T18:38:45+00:00",
+            "discussionsCount": 0,
+            "commentsCount": 2,
+            "canEdit": true,
+            "canDelete": true,
+            "lastSeenTime": "2017-11-14T02:41:36+00:00",
+            "isActivated": true,
+            "email": "sklard@tumblr.com",
+            "readTime": null,
+            "unreadNotificationsCount": 7,
+            "newNotificationsCount": 2,
+            "preferences": {
+                "notify_discussionRenamed_alert": true,
+                "notify_postLiked_alert": true,
+                "notify_discussionLocked_alert": true,
+                "notify_postMentioned_alert": true,
+                "notify_postMentioned_email": false,
+                "notify_userMentioned_alert": true,
+                "notify_userMentioned_email": false,
+                "notify_newPost_alert": true,
+                "notify_newPost_email": true,
+                "followAfterReply": false,
+                "discloseOnline": true,
+                "indexProfile": true,
+                "locale": null
+            },
+            "newFlagsCount": 0,
+            "suspendUntil": null,
+            "canSuspend": true
+        },
+        "relationships": {
+            "groups": {
+                "data": [
+                    {
+                        "type": "groups",
+                        "id": "7"
+                    }
+                ]
+            }
+        }
+    },
+    "included": [
+        {
+            "type": "groups",
+            "id": "7",
+            "attributes": {
+                "nameSingular": "Layperson",
+                "namePlural": "Laypeople",
+                "color": null,
+                "icon": null
+            }
+        }
+    ]
+}*/
         $routes->get(
             '/users/{id}',
             'users.show',
@@ -151,6 +227,23 @@ class ApiServiceProvider extends AbstractServiceProvider
         );
 
         // Edit a user
+        /*
+        It is possible to edit a user's GROUP MEMBERSHIP via this call.
+        Use this body:
+        {"data":{
+	        "relationships": {
+              "groups": {
+                "data": [
+                    {
+                        "type": "groups",
+                        "id": "7"
+                    }
+                ]
+              }
+        }   }
+        Keep in mind: you will be completely revising the user's group membership!
+        So you must REPEAT existing group memberships if your intent is to add!
+        */
         $routes->patch(
             '/users/{id}',
             'users.update',
@@ -294,6 +387,11 @@ class ApiServiceProvider extends AbstractServiceProvider
             $route->toController(Controller\DeletePostController::class)
         );
 
+
+
+
+
+
         /*
         |--------------------------------------------------------------------------
         | Groups
@@ -301,20 +399,36 @@ class ApiServiceProvider extends AbstractServiceProvider
         */
 
         // List groups
+        // Example response:
+        /*
+        {"data":
+            [{"type":"groups","id":"1","attributes":{"nameSingular":"Admin","namePlural":"Admins","color":"#B72A2A","icon":"wrench"}},
+             {"type":"groups","id":"2","attributes":{"nameSingular":"Guest","namePlural":"Guests","color":null,"icon":null}},
+             {"type":"groups","id":"3","attributes":{"nameSingular":"Member","namePlural":"Members","color":null,"icon":null}},
+             {"type":"groups","id":"4","attributes":{"nameSingular":"Mod","namePlural":"Mods","color":"#80349E","icon":"bolt"}},
+             {"type":"groups","id":"5","attributes":{"nameSingular":"YoungMarrieds","namePlural":"YoungMarrieds","color":"","icon":""}},
+             {"type":"groups","id":"6","attributes":{"nameSingular":"Youth Group","namePlural":"Youth Group","color":"#458B00","icon":""}}]}
+        */
         $routes->get(
             '/groups',
             'groups.index',
             $route->toController(Controller\ListGroupsController::class)
         );
 
+
         // Create a group
+        // Required attributes:  nameSingular and namePlural
+        // Sample body: {"data":{"attributes":{"nameSingular":"Layperson", "namePlural":"Laypeople"}}}
         $routes->post(
             '/groups',
             'groups.create',
             $route->toController(Controller\CreateGroupController::class)
         );
 
-        // Edit a group
+
+
+        // Edit a group's characteristics 
+        // ***> BUT NOT ITS MEMBERSHIP LIST
         $routes->patch(
             '/groups/{id}',
             'groups.update',
@@ -327,6 +441,8 @@ class ApiServiceProvider extends AbstractServiceProvider
             'groups.delete',
             $route->toController(Controller\DeleteGroupController::class)
         );
+
+
 
         /*
         |--------------------------------------------------------------------------

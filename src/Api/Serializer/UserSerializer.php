@@ -45,6 +45,7 @@ class UserSerializer extends UserBasicSerializer
             'commentsCount'    => (int) $user->comments_count,
             'canEdit'          => $canEdit,
             'canDelete'        => $gate->allows('delete', $user),
+            'uid'              => $user->uid,
         ];
 
         if ($user->getPreference('discloseOnline')) {
