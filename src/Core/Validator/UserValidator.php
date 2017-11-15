@@ -56,6 +56,12 @@ class UserValidator extends AbstractValidator
                 'email',
                 'unique:users,email'.$idSuffix
             ],
+            // DFSKLARD: New required field:
+            'uid' => [
+                'required',
+                'min:12',
+                'unique:users,uid'.$idSuffix
+            ],
             'password' => [
                 'required',
                 'min:8'
