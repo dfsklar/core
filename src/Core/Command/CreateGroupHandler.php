@@ -14,6 +14,7 @@ namespace Flarum\Core\Command;
 use Flarum\Core\Access\AssertPermissionTrait;
 use Flarum\Core\Exception\PermissionDeniedException;
 use Flarum\Core\Group;
+use Flarum\Core\Repository\UserRepository;
 use Flarum\Core\Support\DispatchEventsTrait;
 use Flarum\Core\Validator\GroupValidator;
 use Flarum\Event\GroupWillBeSaved;
@@ -33,10 +34,11 @@ class CreateGroupHandler
      * @param Dispatcher $events
      * @param GroupValidator $validator
      */
-    public function __construct(Dispatcher $events, GroupValidator $validator)
+    public function __construct(Dispatcher $events, GroupValidator $validator, UserRepository $users)
     {
         $this->events = $events;
         $this->validator = $validator;
+        $this->users = $users;
     }
 
     /**
@@ -51,11 +53,20 @@ class CreateGroupHandler
 
         $this->assertCan($actor, 'createGroup');
 
+        // DFSKLARD:  normalize given user ID
+        $leader = array_get($data, 'attributes.leader_user_id');
+        // ^^^ This ended up working!  Made into mysql row whether or
+        // not the JSON representation was string or int.
+
+        $leader = $this->users->findOrFail(
+           array_get($data, 'attributes.leader_user_id'), $actor);
+
         $group = Group::build(
             array_get($data, 'attributes.nameSingular'),
             array_get($data, 'attributes.namePlural'),
             array_get($data, 'attributes.color'),
-            array_get($data, 'attributes.icon')
+            array_get($data, 'attributes.icon'),
+            $leader->id
         );
 
         $this->events->fire(

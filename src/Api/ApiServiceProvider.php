@@ -154,7 +154,7 @@ class ApiServiceProvider extends AbstractServiceProvider
             $route->toController(Controller\CreateUserController::class)
         );
 
-        
+
         // Get all info about a single user
         /*
         Actual sample result:
@@ -416,9 +416,14 @@ class ApiServiceProvider extends AbstractServiceProvider
         );
 
 
-        // Create a group
+        // Create a group.
+        // DFSKLARD: Current bug: you can create any number of groups with
+        // the exact same singular/plural names.
         // Required attributes:  nameSingular and namePlural
         // Sample body: {"data":{"attributes":{"nameSingular":"Layperson", "namePlural":"Laypeople"}}}
+        //
+        // DFSKLARD: added specification of leader (can be specified via either ID or UID)
+        // but it is NOT operational yet!
         $routes->post(
             '/groups',
             'groups.create',

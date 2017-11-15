@@ -57,6 +57,15 @@ class GroupSerializer extends AbstractSerializer
         ];
     }
 
+
+    /** DFSKLARD
+     * @return \Tobscure\JsonApi\Relationship
+     */
+    protected function leaderUser($group)
+    {
+        return $this->hasOne($group, 'Flarum\Api\Serializer\UserBasicSerializer');
+    }
+
     /**
      * @return \Tobscure\JsonApi\Relationship
      */

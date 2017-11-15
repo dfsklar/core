@@ -24,6 +24,7 @@ use Flarum\Event\GroupWasRenamed;
  * @property string $name_plural
  * @property string|null $color
  * @property string|null $icon
+ * @property int|null $start_user_id
  * @property \Illuminate\Database\Eloquent\Collection $users
  * @property \Illuminate\Database\Eloquent\Collection $permissions
  */
@@ -82,7 +83,7 @@ class Group extends AbstractModel
      * @param string $icon
      * @return static
      */
-    public static function build($nameSingular, $namePlural, $color, $icon)
+    public static function build($nameSingular, $namePlural, $color, $icon, $leader_user_id)
     {
         $group = new static;
 
@@ -90,6 +91,10 @@ class Group extends AbstractModel
         $group->name_plural = $namePlural;
         $group->color = $color;
         $group->icon = $icon;
+
+        // The given USER ID (for leader) is currently ambiguous: either ID or UID.
+        // Must normalize to UID.
+        $group->leader_user_id = $leader_user_id;
 
         $group->raise(new GroupWasCreated($group));
 
@@ -111,6 +116,16 @@ class Group extends AbstractModel
         $this->raise(new GroupWasRenamed($this));
 
         return $this;
+    }
+
+    /**
+     * Define the relationship with the group's leader.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function leader_user()
+    {
+        return $this->belongsTo('Flarum\Core\User', 'leader_user_id');
     }
 
     /**
