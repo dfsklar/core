@@ -155,6 +155,14 @@ class ApiServiceProvider extends AbstractServiceProvider
         );
 
 
+
+        // Get the roster of a single group
+        $routes->get(
+            '/groups/{id}',
+            'groups.show',
+            $route->toController(Controller\ShowGroupController::class)
+        );
+
         // Get all info about a single user
         /*
         Actual sample result:
@@ -225,6 +233,11 @@ class ApiServiceProvider extends AbstractServiceProvider
             'users.show',
             $route->toController(Controller\ShowUserController::class)
         );
+
+
+
+
+
 
         // Edit a user
         /*

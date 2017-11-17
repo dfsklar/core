@@ -74,6 +74,16 @@ class GroupSerializer extends AbstractSerializer
         return $this->hasMany($group, 'Flarum\Api\Serializers\PermissionSerializer');
     }
 
+
+    /**
+     * @return \Tobscure\JsonApi\Relationship
+     */
+    protected function users($group)
+    {
+        return $this->hasMany($group, 'Flarum\Api\Serializer\UserBasicSerializer');
+    }
+
+
     /**
      * @param string $name
      * @return string

@@ -128,6 +128,21 @@ class Group extends AbstractModel
         return $this->belongsTo('Flarum\Core\User', 'leader_user_id');
     }
 
+
+    /**
+     * Query the discussion's participants (a list of unique users who have
+     * posted in the discussion).
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function members()
+    {
+        return User::join('groups', 'groups.user_id', '=', 'users.id')
+            ->where('groups.id', $this->id)
+            ->select('users.*')
+            ->distinct();
+    }
+
     /**
      * Define the relationship with the group's users.
      *
