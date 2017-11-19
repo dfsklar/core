@@ -54,6 +54,7 @@ class GroupSerializer extends AbstractSerializer
             'namePlural'   => $this->translateGroupName($group->name_plural),
             'color'        => $group->color,
             'icon'         => $group->icon,
+            'slug'         => $group->slug
         ];
     }
 

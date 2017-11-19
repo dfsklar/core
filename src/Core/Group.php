@@ -83,7 +83,7 @@ class Group extends AbstractModel
      * @param string $icon
      * @return static
      */
-    public static function build($nameSingular, $namePlural, $color, $icon, $leader_user_id)
+    public static function build($nameSingular, $namePlural, $color, $icon, $leader_user_id, $slug)
     {
         $group = new static;
 
@@ -91,6 +91,7 @@ class Group extends AbstractModel
         $group->name_plural = $namePlural;
         $group->color = $color;
         $group->icon = $icon;
+        $group->slug = $slug;   // DFSKLARD new field
 
         // The given USER ID (for leader) is currently ambiguous: either ID or UID.
         // Must normalize to UID.

@@ -39,7 +39,11 @@ class GroupRepository
      */
     public function findOrFail($id, User $actor = null)
     {
+        // DFSKLARD: Allow lookup of group by either numeric auto-assigned ID *or* app-assigned SLUG (string UUID).
         $query = Group::where('id', $id);
+        if (! $query->first()) {
+            $query = Group::where('slug', $id);
+        }
 
         return $this->scopeVisibleTo($query, $actor)->firstOrFail();
     }

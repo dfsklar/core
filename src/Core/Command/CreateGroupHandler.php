@@ -66,7 +66,8 @@ class CreateGroupHandler
             array_get($data, 'attributes.namePlural'),
             array_get($data, 'attributes.color'),
             array_get($data, 'attributes.icon'),
-            $leader->id
+            $leader->id,
+            array_get($data, 'attributes.slug')
         );
 
         $this->events->fire(

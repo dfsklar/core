@@ -23,7 +23,6 @@ trait AssertPermissionTrait
     protected function assertPermission($condition)
     {
         if (! $condition) {
-            print("FEW");
             throw new PermissionDeniedException;
         }
     }

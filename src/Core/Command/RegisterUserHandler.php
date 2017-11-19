@@ -118,6 +118,10 @@ class RegisterUserHandler
             $user->activate();
         }
 
+        // DFSKLARD: the above is not working for me, so must activate automatically.
+        $user->activate();
+        
+
         if ($avatarUrl = array_get($data, 'attributes.avatarUrl')) {
             $validation = $this->validatorFactory->make(compact('avatarUrl'), ['avatarUrl' => 'url']);
 

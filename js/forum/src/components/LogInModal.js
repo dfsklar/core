@@ -139,6 +139,7 @@ export default class LogInModal extends Modal {
     const password = this.password();
     const remember = this.remember();
 
+    // DFSKLARD: The actual app.session.login that gives the server the chance to verify password.
     app.session.login({identification, password, remember}, {errorHandler: this.onerror.bind(this)})
       .then(
         () => window.location.reload(),
