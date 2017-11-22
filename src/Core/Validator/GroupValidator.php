@@ -15,6 +15,11 @@ class GroupValidator extends AbstractValidator
 {
     protected $rules = [
         'name_singular' => ['required'],
-        'name_plural' => ['required']
+        'name_plural' => ['required'],
+        // DFSKLARD: New required field:
+        'slug' => [
+            'required',
+            'unique:groups,slug'
+        ]        
     ];
 }

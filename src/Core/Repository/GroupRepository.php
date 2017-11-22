@@ -40,9 +40,9 @@ class GroupRepository
     public function findOrFail($id, User $actor = null)
     {
         // DFSKLARD: Allow lookup of group by either numeric auto-assigned ID *or* app-assigned SLUG (string UUID).
-        $query = Group::where('id', $id);
+        $query = Group::where('slug', $id);
         if (! $query->first()) {
-            $query = Group::where('slug', $id);
+            $query = Group::where('id', $id);
         }
 
         return $this->scopeVisibleTo($query, $actor)->firstOrFail();
@@ -56,9 +56,12 @@ class GroupRepository
      */
     public function findByName($name, User $actor = null)
     {
+        return null;  // DFSKLARD: we never use name to find a group in Formed communities
+    /*
         $query = Group::where('name_singular', $name)->orWhere('name_plural', $name);
 
         return $this->scopeVisibleTo($query, $actor)->first();
+    */
     }
 
     /**
