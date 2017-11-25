@@ -61,7 +61,7 @@ export default class DiscussionList extends Component {
 
     let button_newDiscussion = 
       Button.component({
-        children: [ <span>+</span> ],
+        children: [ <span>POST</span> ],
         icon: 'edit',
         className: 'Button Button--primary IndexPage-newDiscussion',
         itemClassName: 'App-primaryControl',

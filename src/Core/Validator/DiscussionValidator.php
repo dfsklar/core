@@ -13,10 +13,11 @@ namespace Flarum\Core\Validator;
 
 class DiscussionValidator extends AbstractValidator
 {
+
+    // DFSKLARD: we do not want to require any title on a flarum discussion (a.k.a. "thread").
     protected $rules = [
         'title' => [
-            'required',
-            'min:3',
+            'min:0',
             'max:80'
         ]
     ];
