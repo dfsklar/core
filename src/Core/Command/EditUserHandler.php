@@ -14,6 +14,7 @@ namespace Flarum\Core\Command;
 use Exception;
 use Flarum\Core\Access\AssertPermissionTrait;
 use Flarum\Core\AvatarUploader;
+use Flarum\Core\Repository\GroupRepository;
 use Flarum\Core\Repository\UserRepository;
 use Flarum\Core\Support\DispatchEventsTrait;
 use Flarum\Core\User;
@@ -36,6 +37,11 @@ class EditUserHandler
     protected $users;
 
     /**
+     * @var UserRepository
+     */
+    protected $groups;
+
+    /**
      * @var UserValidator
      */
     protected $validator;
@@ -53,14 +59,16 @@ class EditUserHandler
     /**
      * @param Dispatcher $events
      * @param UserRepository $users
+     * @param GroupRepository $groups
      * @param UserValidator $validator
      * @param AvatarUploader $avatarUploader
      * @param Factory $validatorFactory
      */
-    public function __construct(Dispatcher $events, UserRepository $users, UserValidator $validator, AvatarUploader $avatarUploader, Factory $validatorFactory)
+    public function __construct(Dispatcher $events, UserRepository $users, UserValidator $validator, AvatarUploader $avatarUploader, Factory $validatorFactory, GroupRepository $groups)
     {
         $this->events = $events;
         $this->users = $users;
+        $this->groups = $groups;
         $this->validator = $validator;
         $this->avatarUploader = $avatarUploader;
         $this->validatorFactory = $validatorFactory;
@@ -130,8 +138,6 @@ class EditUserHandler
         }
 
         // DFSKLARD: This is where a user's set of groups-to-which-she-belongs changes.
-        /* It appears that this only looks for the NEW group IDs and is not a way
-           to drop a group from a user's list of groups!??  */
         if (isset($relationships['groups']['data']) && is_array($relationships['groups']['data'])) {
             $this->assertPermission($canEdit);
 
@@ -141,10 +147,15 @@ class EditUserHandler
             $newGroupIds = [];
             foreach ($relationships['groups']['data'] as $group) {
                 if ($id = array_get($group, 'id')) {
-                    $newGroupIds[] = $id;  // This PHP syntax means:  "append to array"
+                    // DFSKLARD: I added support for allowing the ID to be specified by slug, so I always
+                    // have to "validate" the given ID via a findOrFail, since findOrFail accepts slugs as lookup keys.
+                    $actualGroupObject = $this->groups->findOrFail($id);
+                    if ($actualGroupObject)
+                        $newGroupIds[] = strval($actualGroupObject['attributes']['id']);
                 }
             }
 
+            // DFSKLARD: I added mode="add":
             if (isset($relationships['mode'])) {
                 if ($relationships['mode'] == "add") {
                     // The caller only wants to ADD one or more new groups to this user's set of groups.
