@@ -4,6 +4,7 @@ import PostsUserPage from 'flarum/components/PostsUserPage';
 import DiscussionsUserPage from 'flarum/components/DiscussionsUserPage';
 import SettingsPage from 'flarum/components/SettingsPage';
 import NotificationsPage from 'flarum/components/NotificationsPage';
+import GroupRosterPage from 'flarum/components/GroupRosterPage';
 
 /**
  * The `routes` initializer defines the forum app's routes.
@@ -25,7 +26,9 @@ export default function(app) {
     'user.discussions': {path: '/u/:username/discussions', component: DiscussionsUserPage.component()},
 
     'settings': {path: '/settings', component: SettingsPage.component()},
-    'notifications': {path: '/notifications', component: NotificationsPage.component()}
+    'notifications': {path: '/notifications', component: NotificationsPage.component()},
+
+    'group.roster': {path: '/roster/:groupid', component: GroupRosterPage.component()}
   };
 
   /**

@@ -80,6 +80,12 @@ class ForumServiceProvider extends AbstractServiceProvider
         );
 
         $routes->get(
+            '/roster/{groupid}',
+            'groupRoster',
+            $route->toController(Controller\GroupController::class)
+        );
+
+        $routes->get(
             '/settings',
             'settings',
             $route->toController(Controller\AuthorizedWebAppController::class)
