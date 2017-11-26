@@ -62,6 +62,6 @@ class SelfDemotionGuard
         }
 
         // If we get to this point, we have to prohibit the edit
-        throw new PermissionDeniedException;
+        throw new PermissionDeniedException("Flarum will not allow an admin to accidentally discard her admin rights.");
     }
 }

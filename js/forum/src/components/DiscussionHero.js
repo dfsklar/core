@@ -70,10 +70,13 @@ export default class DiscussionHero extends Component {
 
     items.add('title', <h2 className="DiscussionHero-title">{discussion.title()}</h2>);
     items.add('author', <div className="DiscussionHero-author">{startingPostUserName}</div>);
+
+    // m.trust allows you to ask mithril to take the raw html and not try to protect it
     items.add('startingpost', 
        <div className="DiscussionHero-StartingPost">
            {m.trust(includedPosts[0].data.attributes.contentHtml)}
        </div>);
+       
     items.add('controls', 
       SplitDropdown.component({
         children: DiscussionControls.controls(discussion, this).toArray(),

@@ -67,6 +67,8 @@ class EditUserHandler
     }
 
     /**
+     * DFSKLARD: I am adding the ability to say "simply add this new relationship" as opposed to completely replacement.
+     * To do so, simply add "mode":"add" as a sibling of "groups" key in the data->relationships object.
      * @param EditUser $command
      * @return User
      * @throws \Flarum\Core\Exception\PermissionDeniedException
@@ -127,13 +129,36 @@ class EditUserHandler
             }
         }
 
+        // DFSKLARD: This is where a user's set of groups-to-which-she-belongs changes.
+        /* It appears that this only looks for the NEW group IDs and is not a way
+           to drop a group from a user's list of groups!??  */
         if (isset($relationships['groups']['data']) && is_array($relationships['groups']['data'])) {
             $this->assertPermission($canEdit);
 
+            // We are going to create an array of INTs which specifies the revised complete set of group IDs for this user.
+            // Warning: this variable is poorly named.  It is NOT a list of the *new* groups for this user!
+            // It is the *new* complete list of groups for this user and thus can cause groups to be dropped from this user's set of groups.
             $newGroupIds = [];
             foreach ($relationships['groups']['data'] as $group) {
                 if ($id = array_get($group, 'id')) {
-                    $newGroupIds[] = $id;
+                    $newGroupIds[] = $id;  // This PHP syntax means:  "append to array"
+                }
+            }
+
+            if (isset($relationships['mode'])) {
+                if ($relationships['mode'] == "add") {
+                    // The caller only wants to ADD one or more new groups to this user's set of groups.
+                    // So we visit the user's current list of groups and make sure they are all added to $newGroupIds.
+                    foreach ($user->groups()->get()->all() as $currentGroup) {
+                        $gid = strval($currentGroup['attributes']['id']);
+                        if ( ! in_array($gid, $newGroupIds)) {
+                            $newGroupIds[] = $gid;
+                            $relationships['groups']['data'][] = Array(
+                               "type" => "groups",
+                               "id" => $gid);
+                        }
+                    }
+                    $data['relationships'] = $relationships;
                 }
             }
 
