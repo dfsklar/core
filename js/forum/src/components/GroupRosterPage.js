@@ -29,7 +29,10 @@ export default class GroupRosterPage extends UserPage {
 
   view() {
     return (
-      <h1>HELLOW FROM group roster page </h1>
+      <div>
+      <h1>HELLO FROM group roster page </h1>
+      <p>This page already has the data in the GroupRosterPage JS-side class, so just a template away from rendering
+        with no interaction yet.</p></div>
     );
   }
 
@@ -39,9 +42,12 @@ export default class GroupRosterPage extends UserPage {
    * @param {Group} group
    */
   show(group) {
-    // HORIBBLE!  The group has the relationships but they are not expanded, they have no usernames, just an int index ID!
-    // But all that info was indeed in the response from the HTTP API request!  In the "included" section!
-    // We need to change app.store.find to inclue this
+    /*
+    group.payload.included is an array of all users:
+       each user record has:
+          .attributes.username
+                      .uid < the user's formed-side UUID
+    */
     console.log("WE HAVE MADE IT");
   }
 

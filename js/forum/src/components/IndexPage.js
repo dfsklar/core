@@ -70,6 +70,12 @@ export default class IndexPage extends Page {
     }
 
 
+    // Obtain full info about the group that is associated with this primary tag.
+    let associatedGroupID = app.store.getBy('groups','slug', current_tag.parent().slug()).id();
+    app.store.find('groups', associatedGroupID)
+    .then(this.handleGroupDetails.bind(this));
+
+
 
     if (app.cache.discussionList) {
       // Compare the requested parameters (sort, search query) to the ones that
@@ -95,6 +101,18 @@ export default class IndexPage extends Page {
 
     this.bodyClass = 'App--index';
   }
+
+
+  handleGroupDetails(group) {
+      /*
+      group.payload.included is an array of all users:
+         each user record has:
+            .attributes.username
+                        .uid < the user's formed-side UUID
+      */
+      console.log("WE HAVE OBTAINED GROUP INFO");
+  }
+
 
   onunload() {
     // Save the scroll position so we can restore it when we return to the
