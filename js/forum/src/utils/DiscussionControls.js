@@ -16,7 +16,7 @@ export default {
   /**
    * Get a list of controls for a discussion.
    * 
-   * DFSKLARD: A DiscussionHero context should show only one button: REPLY
+   * DFSKLARD: A DiscussionHero context should show only one button: COMMENTCOM
    *
    * @param {Discussion} discussion
    * @param {*} context The parent component under which the controls menu will
@@ -52,19 +52,19 @@ export default {
   userControls(discussion, context) {
     const items = new ItemList();
 
-    // Only add a reply control if this is the discussion's controls dropdown
+    // Only add a COMMENT control if this is the discussion's controls dropdown
     // for the discussion page itself. We don't want it to show up for
     // discussions in the discussion list, etc.
     if ( (context instanceof DiscussionPage) || (context instanceof DiscussionHero))  {
-      items.add('reply',
+      items.add('comment',
         (!app.session.user || discussion.canReply())
           ? Button.component({
             icon: 'reply',
-            children: app.translator.trans(app.session.user ? 'core.forum.discussion_controls.reply_button' : 'core.forum.discussion_controls.log_in_to_reply_button'),
+            children: app.translator.trans(app.session.user ? 'core.forum.discussion_controls.comment_button' : 'core.forum.discussion_controls.log_in_to_reply_button'),
             onclick: this.replyAction.bind(discussion, true, false)
           })
           : Button.component({
-            icon: 'reply',
+            icon: 'comment',
             children: app.translator.trans('core.forum.discussion_controls.cannot_reply_button'),
             className: 'disabled',
             title: app.translator.trans('core.forum.discussion_controls.cannot_reply_text')
