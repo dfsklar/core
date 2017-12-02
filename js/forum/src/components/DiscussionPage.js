@@ -120,6 +120,9 @@ export default class DiscussionPage extends Page {
                   <ul>{listItems(this.sidebarItems().toArray())}</ul>
                 </nav>
                 <div className="DiscussionPage-stream">
+                  { (discussion.data.relationships.posts.data.length < 2) ?
+                    <div className='Placeholder'>It looks like there are no comments here yet!  Feel free to start this discussion!</div> : ''
+                  }
                   {this.stream.render()}
                 </div>
               </div>

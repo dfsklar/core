@@ -65,25 +65,30 @@ export default class DiscussionHero extends Component {
     }
 
     // DFSKLARD: This is how I learned how to use the app.store and the .relationships. properties.
-    const startingPostUserID = includedPosts[0].data.relationships.user.data.id;
-    const startingPostUserName = app.store.getById('users', startingPostUserID).data.attributes.displayName;
+    const startingPostUserID = includedPosts[0] ? (includedPosts[0].data.relationships.user.data.id) : null;
+    const startingPostUserName = startingPostUserID ? app.store.getById('users', startingPostUserID).data.attributes.displayName : "Unknown user";
 
     items.add('title', <h2 className="DiscussionHero-title">{discussion.title()}</h2>);
-    items.add('author', <div className="DiscussionHero-author">{startingPostUserName}</div>);
 
-    // m.trust allows you to ask mithril to take the raw html and not try to protect it
-    items.add('startingpost', 
-       <div className="DiscussionHero-StartingPost">
-           {m.trust(includedPosts[0].data.attributes.contentHtml)}
-       </div>);
-       
-    items.add('controls', 
+    if (startingPostUserName) {
+      items.add('author', <div className="DiscussionHero-author">{startingPostUserName}</div>);
+
+      // m.trust allows you to ask mithril to take the raw html and not try to protect it
+      items.add('startingpost', 
+        <div className="DiscussionHero-StartingPost">
+            {m.trust(includedPosts[0].data.attributes.contentHtml)}
+        </div>);
+      items.add('controls', 
       SplitDropdown.component({
         children: DiscussionControls.controls(discussion, this).toArray(),
         icon: 'ellipsis-v',
         className: 'App-primaryControl',
         buttonClassName: 'Button--primary'
         }));
+    } else {
+      alert("Sklar needs to know about this.");
+      const dfsklar_wants_to_know = 999;
+    }
 
     return items;
   }
