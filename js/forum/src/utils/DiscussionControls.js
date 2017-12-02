@@ -55,22 +55,22 @@ export default {
     // Only add a COMMENT control if this is the discussion's controls dropdown
     // for the discussion page itself. We don't want it to show up for
     // discussions in the discussion list, etc.
-    if ( (context instanceof DiscussionPage) || (context instanceof DiscussionHero))  {
-      items.add('comment',
-        (!app.session.user || discussion.canReply())
-          ? Button.component({
-            icon: 'reply',
-            children: app.translator.trans(app.session.user ? 'core.forum.discussion_controls.comment_button' : 'core.forum.discussion_controls.log_in_to_reply_button'),
-            onclick: this.replyAction.bind(discussion, true, false)
-          })
-          : Button.component({
-            icon: 'comment',
-            children: app.translator.trans('core.forum.discussion_controls.cannot_reply_button'),
-            className: 'disabled',
-            title: app.translator.trans('core.forum.discussion_controls.cannot_reply_text')
-          })
-      );
-    }
+    //
+    // DFSKLARD: Also, don't show this at all if DiscussionList object has canStartDiscussion==false
+    items.add('comment',
+      ( app.cache.discussionList && app.cache.discussionList.canStartDiscussion && ( (context instanceof DiscussionPage) || (context instanceof DiscussionHero) ) ) 
+      ?     
+      Button.component({
+        icon: 'comment',
+        children: app.translator.trans('core.forum.discussion_controls.comment_button'),
+        title: app.translator.trans('core.forum.discussion_controls.comment_button')
+      }) :
+      Button.component({
+        icon: 'comment',
+        children: [ 'Join this group to add your commentary!' ],
+        className: 'disabled',
+        title: 'Cannot comment yet'
+      }) );
 
     return items;
   },
