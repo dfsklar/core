@@ -7,6 +7,7 @@ import SelectDropdown from 'flarum/components/SelectDropdown';
 import NotificationsDropdown from 'flarum/components/NotificationsDropdown';
 import ItemList from 'flarum/utils/ItemList';
 import listItems from 'flarum/helpers/listItems';
+import username from 'flarum/helpers/username';
 
 /**
  * The `HeaderSecondary` component displays secondary header controls, such as
@@ -66,7 +67,10 @@ export default class HeaderSecondary extends Component {
 
     if (app.session.user) {
       items.add('notifications', NotificationsDropdown.component(), 10);
-      items.add('session', SessionDropdown.component(), 0);
+      // items.add('session', SessionDropdown.component(), 0);  // DFSKLARD need to change this <span className="Button-label disable-interaction">{username(user)}</span>
+      items.add('username', (
+        <span className='username'>{username(app.session.user)}</span>
+      ));
     } else {
       if (app.forum.attribute('allowSignUp')) {
         items.add('signUp',

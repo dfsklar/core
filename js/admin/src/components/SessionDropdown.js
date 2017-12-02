@@ -28,7 +28,7 @@ export default class SessionDropdown extends Dropdown {
 
     return [
       avatar(user), ' ',
-      <span className="Button-label">{username(user)}</span>
+      <span className="Button-label disable-interaction">{username(user)}</span>
     ];
   }
 
