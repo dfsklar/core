@@ -39,6 +39,7 @@ export default class DiscussionList extends Component {
      * @type {Discussion[]}
      */
     this.discussions = [];
+    this.isMemberOfGroup = false;  // for now
 
     this.refresh();
   }
@@ -47,7 +48,15 @@ export default class DiscussionList extends Component {
     const params = this.props.params;
     let loading;
 
-    const canStartDiscussion = app.forum.attribute('canStartDiscussion') || !app.session.user;
+    // At this point, parentIndexPage should be available!
+    if (this.parentIndexPage) {
+      this.matchingGroup = app.store.getBy('groups', 'slug', this.parentIndexPage.associatedGroupSLUG);
+      this.loggedinUserMembershipList = app.session.user.data.relationships.groups.data;
+      this.isMemberOfGroup = this.loggedinUserMembershipList.some(group => (group.id == this.matchingGroup.data.id));
+    }
+
+
+    this.canStartDiscussion = this.isMemberOfGroup;  //DFSKLARD: I now let any group member post.app.forum.attribute('canStartDiscussion') || !app.session.user;
 
     if (this.loading) {
       loading = LoadingIndicator.component();
@@ -59,23 +68,24 @@ export default class DiscussionList extends Component {
       });
     }
 
+    // DFSKLARD: the POST button on the group's home forum page (list of sessions page)
     let button_newDiscussion = 
       Button.component({
         children: [ <span>POST</span> ],
         icon: 'edit',
         className: 'Button Button--primary IndexPage-newDiscussion',
         itemClassName: 'App-primaryControl',
-        onclick: this.parentIndexPage.newDiscussion.bind(this.parentIndexPage),
-        disabled: !canStartDiscussion
+        onclick: this.parentIndexPage.newDiscussion.bind(this.parentIndexPage)
       })
 
     if (this.discussions.length === 0 && !this.loading) {
       const text = app.translator.trans('core.forum.discussion_list.empty_text');
-      return (
+      return
+      (
         <div className="DiscussionList">
           {Placeholder.component({text})}
-          {button_newDiscussion}
-        </div>
+          { this.canStartDiscussion ? button_newDiscussion : '' }
+          </div>
       );
     }
 
@@ -93,10 +103,14 @@ export default class DiscussionList extends Component {
         <div className="DiscussionList-loadMore">
           {loading}
         </div>
-        {button_newDiscussion}
+           { this.canStartDiscussion ? button_newDiscussion : '' }
       </div>
     );
   }
+
+  // DFSKLARD: This is the POST button on the GROUP page ^^^^^^^^ (button_newDiscussion)
+
+
 
   /**
    * Get the parameters that should be passed in the API request to get
