@@ -20,13 +20,16 @@ export default {
   controls(post, context) {
     const items = new ItemList();
 
-    ['user', 'moderation', 'destructive'].forEach(section => {
-      const controls = this[section + 'Controls'](post, context).toArray();
-      if (controls.length) {
-        controls.forEach(item => items.add(item.itemName, item));
-        items.add(section + 'Separator', Separator.component());
-      }
-    });
+    // DFSKLARD: If user is not a member of group, NO actions available to them.
+    if (app.cache.discussionList && app.cache.discussionList.canStartDiscussion) {
+      ['user', 'moderation', 'destructive'].forEach(section => {
+        const controls = this[section + 'Controls'](post, context).toArray();
+        if (controls.length) {
+          controls.forEach(item => items.add(item.itemName, item));
+          items.add(section + 'Separator', Separator.component());
+        }
+      });
+    }
 
     return items;
   },

@@ -80,8 +80,7 @@ export default class DiscussionList extends Component {
 
     if (this.discussions.length === 0 && !this.loading) {
       const text = app.translator.trans('core.forum.discussion_list.empty_text');
-      return
-      (
+      return (
         <div className="DiscussionList">
           {Placeholder.component({text})}
           { this.canStartDiscussion ? button_newDiscussion : '' }

@@ -63,7 +63,8 @@ export default {
       Button.component({
         icon: 'comment',
         children: app.translator.trans('core.forum.discussion_controls.comment_button'),
-        title: app.translator.trans('core.forum.discussion_controls.comment_button')
+        title: app.translator.trans('core.forum.discussion_controls.comment_button'),
+        onclick: this.replyAction.bind(discussion, true, false)
       }) :
       Button.component({
         icon: 'comment',
