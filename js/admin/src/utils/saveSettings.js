@@ -3,6 +3,7 @@ export default function saveSettings(settings) {
 
   Object.assign(app.data.settings, settings);
 
+  // DFSKLARD: ** HOW YOU CALL THE API **
   return app.request({
     method: 'POST',
     url: app.forum.attribute('apiUrl') + '/settings',

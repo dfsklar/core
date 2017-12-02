@@ -135,7 +135,11 @@ export default class Model {
       data.relationships = {};
 
       for (const key in attributes.relationships) {
-        const model = attributes.relationships[key];
+        var model = attributes.relationships[key];
+
+        if (model.data) {
+          model = model.data;
+        }
 
         data.relationships[key] = {
           data: model instanceof Array
@@ -299,9 +303,15 @@ export default class Model {
    * @protected
    */
   static getIdentifier(model) {
-    return {
-      type: model.data.type,
-      id: model.data.id
-    };
+    if (model.data)
+      return {
+        type: model.data.type,
+        id: model.data.id
+      };
+    else
+      return {
+        type: model.type,
+        id: model.id
+      };
   }
 }
