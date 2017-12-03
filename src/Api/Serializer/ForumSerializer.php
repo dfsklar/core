@@ -74,6 +74,7 @@ class ForumSerializer extends AbstractSerializer
             'welcomeMessage' => $this->settings->get('welcome_message'),
             'themePrimaryColor' => $this->settings->get('theme_primary_color'),
             'themeSecondaryColor' => $this->settings->get('theme_secondary_color'),
+            'formed.org_url' => $this->settings->get('formed.org_url'),
             'logoUrl' => $this->getLogoUrl(),
             'faviconUrl' => $this->getFaviconUrl(),
             'headerHtml' => $this->settings->get('custom_header'),

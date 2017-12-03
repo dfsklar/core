@@ -121,7 +121,7 @@ export default class DiscussionPage extends Page {
                 </nav>
                 <div className="DiscussionPage-stream">
                   { (discussion.data.relationships.posts.data.length < 2) ?
-                    <div className='Placeholder'>It looks like there are no comments here yet!  Feel free to start this discussion!</div> : ''
+                    <div className='Placeholder'>It looks like there are no comments here yet!  Feel free to start some discussion!</div> : ''
                   }
                   {this.stream.render()}
                 </div>
