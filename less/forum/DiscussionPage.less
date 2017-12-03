@@ -13,9 +13,6 @@
   font-size: 24px;
   color: red;
 }
-.DiscussionPage {
-  display: none;
-}
 
 @media @desktop-hd {
   .DiscussionPage-FormFactorNotSupported {
@@ -28,6 +25,9 @@
 
 
 @media @phone {
+  .DiscussionPage {
+    display: none;
+  }  
   .DiscussionPage-nav {
     margin: 0 -15px;
     border-bottom: 1px solid @control-bg;
