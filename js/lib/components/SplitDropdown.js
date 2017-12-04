@@ -19,6 +19,10 @@ export default class SplitDropdown extends Dropdown {
     // these props to a new button, so that it has exactly the same behaviour as
     // the first child.
     const firstChild = this.getFirstChild();
+    if (!firstChild) {
+      return [ ];
+    }
+    
     const buttonProps = Object.assign({}, firstChild.props);
     buttonProps.className = (buttonProps.className || '') + ' SplitDropdown-button Button ' + this.props.buttonClassName;
 
