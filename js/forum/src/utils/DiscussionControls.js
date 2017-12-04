@@ -57,21 +57,22 @@ export default {
     // discussions in the discussion list, etc.
     //
     // DFSKLARD: Also, don't show this at all if DiscussionList object has canStartDiscussion==false
-    items.add('comment',
-      ( app.cache.discussionList && app.cache.discussionList.canStartDiscussion && ( (context instanceof DiscussionPage) || (context instanceof DiscussionHero) ) ) 
-      ?     
-      Button.component({
-        icon: 'comment',
-        children: app.translator.trans('core.forum.discussion_controls.comment_button'),
-        title: app.translator.trans('core.forum.discussion_controls.comment_button'),
-        onclick: this.replyAction.bind(discussion, true, false)
-      }) :
-      Button.component({
-        icon: 'comment',
-        children: [ 'Join this group to add your commentary!' ],
-        className: 'disabled',
-        title: 'Cannot comment yet'
-      }) );
+    if (context instanceof DiscussionHero)
+      items.add('comment',
+        ( app.cache.discussionList && app.cache.discussionList.canStartDiscussion )
+        ?
+        Button.component({
+          icon: 'comment',
+          children: app.translator.trans('core.forum.discussion_controls.comment_button'),
+          title: app.translator.trans('core.forum.discussion_controls.comment_button'),
+          onclick: this.replyAction.bind(discussion, true, false)
+        }) :
+        Button.component({
+          icon: 'comment',
+          children: [ 'Join this group to add your commentary!' ],
+          className: 'disabled',
+          title: 'Cannot comment yet'
+        }) );
 
     return items;
   },
