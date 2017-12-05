@@ -48,15 +48,16 @@ export default class DiscussionList extends Component {
     const params = this.props.params;
     let loading;
 
-    // At this point, parentIndexPage should be available!
-    if (this.parentIndexPage) {
-      this.matchingGroup = app.store.getBy('groups', 'slug', this.parentIndexPage.associatedGroupSLUG);
-      this.loggedinUserMembershipList = app.session.user.data.relationships.groups.data;
-      this.isMemberOfGroup = this.loggedinUserMembershipList.some(group => (group.id == this.matchingGroup.data.id));
-    }
+    const groupSlug = this.parentIndexPage ? this.parentIndexPage.associatedGroupSLUG : params.tags;
 
+    this.matchingGroup = app.store.getBy('groups', 'slug', groupSlug);
+    this.loggedinUserMembershipList = app.session.user.data.relationships.groups.data;
+    this.isMemberOfGroup = this.loggedinUserMembershipList.some(group => (group.id == this.matchingGroup.data.id));
 
     this.canStartDiscussion = this.isMemberOfGroup;  //DFSKLARD: I now let any group member post.app.forum.attribute('canStartDiscussion') || !app.session.user;
+
+    if (!(this.parentIndexPage))
+      return ( [] );
 
     if (this.loading) {
       loading = LoadingIndicator.component();
@@ -67,6 +68,7 @@ export default class DiscussionList extends Component {
         onclick: this.loadMore.bind(this)
       });
     }
+
 
     // DFSKLARD: the POST button on the group's home forum page (list of sessions page)
     let button_newDiscussion = 

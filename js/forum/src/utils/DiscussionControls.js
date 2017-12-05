@@ -1,5 +1,6 @@
 import DiscussionPage from 'flarum/components/DiscussionPage';
 import DiscussionHero from 'flarum/components/DiscussionHero';
+import DiscussionList from 'flarum/components/DiscussionList';
 import ReplyComposer from 'flarum/components/ReplyComposer';
 import LogInModal from 'flarum/components/LogInModal';
 import Button from 'flarum/components/Button';
@@ -55,8 +56,19 @@ export default {
     // Only add a COMMENT control if this is the discussion's controls dropdown
     // for the discussion page itself. We don't want it to show up for
     // discussions in the discussion list, etc.
-    //
-    // DFSKLARD: Also, don't show this at all if DiscussionList object has canStartDiscussion==false
+
+    // DFSKLARD: Don't show this at all if DiscussionList object has canStartDiscussion==false
+    if (!(app.cache.discussionList)) {
+      const groupSlug = discussion.payload.included.find(function(x){return x.type=='groups'}).attributes.slug;
+      app.cache.discussionList = new DiscussionList({
+        params: {
+          filter: undefined,
+          q: undefined,
+          sort: undefined,
+          tags: groupSlug
+        }
+      });
+    }
     if (context instanceof DiscussionHero)
       items.add('comment',
         ( app.cache.discussionList && app.cache.discussionList.canStartDiscussion )
