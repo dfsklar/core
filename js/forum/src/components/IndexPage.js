@@ -93,7 +93,13 @@ export default class IndexPage extends Page {
     }
 
     if (!app.cache.discussionList) {
-      app.cache.discussionList = new DiscussionList({params});
+      let thisDiscussionContextParams = {
+        filter: undefined,
+        q: undefined,
+        sort: undefined,
+        tags: this.current_tag.data.attributes.slug
+      };
+      app.cache.discussionList = new DiscussionList({params: thisDiscussionContextParams});
     }
 
     // DFSKLARD bizarre
