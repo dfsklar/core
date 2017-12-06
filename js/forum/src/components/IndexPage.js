@@ -49,21 +49,20 @@ export default class IndexPage extends Page {
       return;
     }
     else {
-      this.current_tag = app.store.getBy('tags', 'slug', params.tags);
-      if (this.current_tag) {
-        if ( ! (this.current_tag.data.attributes.isChild)) {
+      var current_tag = app.store.getBy('tags', 'slug', params.tags);
+      if (current_tag) {
+        if ( ! (current_tag.data.attributes.isChild)) {
           // SO: we have a situation where we want to reroute to the "latest-added"
           // subchild of this tag.
           // How to find subtags?
-          const children = app.store.all('tags').filter(child => child.parent() === this.current_tag);          
+          const children = app.store.all('tags').filter(child => child.parent() === current_tag);          
           // 
           if (children) {
             if (children.length > 0) {
               const latest_child = children[children.length-1];
-              // m.route(app.route.tag(latest_child));
-              // return;
-              this.tag_repr_group = this.current_tag;
-              this.current_tag = latest_child;
+              const target = app.route.tag(latest_child);
+              m.route(target);
+              return;
             }
           }
         }
@@ -72,8 +71,8 @@ export default class IndexPage extends Page {
 
 
     // Obtain full info about the group that is associated with this primary tag.
-    let associatedGroupID = app.store.getBy('groups','slug', this.current_tag.parent().slug()).id();
-    this.associatedGroupSLUG = this.current_tag.parent().slug();
+    this.associatedGroupSLUG = current_tag.parent().slug();
+    let associatedGroupID = app.store.getBy('groups','slug', this.associatedGroupSLUG).id();
     app.store.find('groups', associatedGroupID)
     .then(this.handleGroupDetails.bind(this));
 
