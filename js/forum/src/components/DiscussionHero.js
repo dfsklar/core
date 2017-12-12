@@ -26,6 +26,20 @@ export default class DiscussionHero extends Component {
     );
   }
 
+
+  // DFSKLARD: after rendering, we want to move the itemtags list into the
+  // page's header.
+  config(isInitialized) {
+    if (isInitialized) {
+      const $elemToMove = this.$('.item-tags');
+      if ($elemToMove.length) {
+        const $destination = $('#header-navigation');
+        $destination.empty();
+        $elemToMove.appendTo($destination);
+      }
+    }
+  }
+
   /**
    * Build an item list for the contents of the discussion hero.
    *
