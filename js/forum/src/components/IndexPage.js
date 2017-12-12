@@ -12,6 +12,8 @@ import Dropdown from 'flarum/components/Dropdown';
 import Button from 'flarum/components/Button';
 import LinkButton from 'flarum/components/LinkButton';
 import SelectDropdown from 'flarum/components/SelectDropdown';
+import SiteSpecifics from 'flarum/SITESPECIFICS';
+
 
 /**
  * The `IndexPage` component displays the index page, including the welcome
@@ -163,6 +165,12 @@ export default class IndexPage extends Page {
 
     app.setTitle('');
     app.setTitleCount(0);
+
+    // DFSKLARD: Create a button for returning to formed.org parish homepage
+    const $destination = $('#header-navigation');
+    const destURL = app.siteSpecifics.fetchFormedURL();
+    $destination.empty();
+    $destination.append('<a href="' + destURL + '" class=returntoformed>Return to parish home</a>');
 
     // Work out the difference between the height of this hero and that of the
     // previous hero. Maintain the same scroll position relative to the bottom

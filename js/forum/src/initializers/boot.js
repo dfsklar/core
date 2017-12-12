@@ -10,6 +10,7 @@ import HeaderSecondary from 'flarum/components/HeaderSecondary';
 import Composer from 'flarum/components/Composer';
 import ModalManager from 'flarum/components/ModalManager';
 import AlertManager from 'flarum/components/AlertManager';
+import SiteSpecifics from 'flarum/SITESPECIFICS';
 
 /**
  * The `boot` initializer boots up the forum app. It initializes some app
@@ -49,6 +50,8 @@ export default function boot(app) {
   app.composer = m.mount(document.getElementById('composer'), Composer.component());
   app.modal = m.mount(document.getElementById('modal'), ModalManager.component());
   app.alerts = m.mount(document.getElementById('alerts'), AlertManager.component());
+
+  app.siteSpecifics = new SiteSpecifics();
 
   const basePath = app.forum.attribute('basePath');
   m.route.mode = 'pathname';
