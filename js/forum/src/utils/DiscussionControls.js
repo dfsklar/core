@@ -74,6 +74,7 @@ export default {
         ( app.cache.discussionList && app.cache.discussionList.canStartDiscussion )
         ?
         Button.component({
+          dfsklard: 'DFSKLARD this is the COMMENT button in the Discussion Hero',
           icon: 'comment',
           children: app.translator.trans('core.forum.discussion_controls.comment_button'),
           title: app.translator.trans('core.forum.discussion_controls.comment_button'),
