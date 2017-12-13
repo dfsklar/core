@@ -297,9 +297,14 @@ export default class DiscussionPage extends Page {
 
     // If the user hasn't read past here before, then we'll update their read
     // state and redraw.
+    // DFSKLARD: THIS IS WHERE THINGS ARE DAMAGED.
+    // At this point, discussion.payload.included is GOOD.
     if (app.session.user && endNumber > (discussion.readNumber() || 0)) {
-      discussion.save({readNumber: endNumber});
-      m.redraw();
+      // DFSKLARD: WE HAVE PROVEN THIS IS THE BAD LINE that was causing the discussion page's
+      // attached discussion to no longer have the "included" section.
+      // discussion.save({readNumber: endNumber});
+      // The above save operation damages things.
+      // DFSKLARD: let's try not redrawing: m.redraw();
     }
   }
 }
