@@ -60,6 +60,7 @@ h4 {
 // PHONES: Somewhere on the page there will be a .App-backControl, a
 // .App-primaryControl, and a .App-titleControl. We will position these on the
 // left, right, and center of the header respectively.
+/*
 @media @phone {
   .App-primaryControl, .App-titleControl, .App-backControl {
     position: absolute !important;
@@ -143,6 +144,7 @@ h4 {
     }
   }
 }
+*/
 
 // ------------------------------------
 // Drawer
@@ -150,6 +152,8 @@ h4 {
 // On phones, the drawer is displayed in its semantic sense: as a drawer on
 // the left side of the screen. On other devices, the drawer has no specific
 // appearance.
+
+/*
 @media @phone {
   .drawerOpen {
     overflow: hidden;
@@ -186,7 +190,8 @@ h4 {
       opacity: 0.9;
     }
   }
-}
+} 
+*/
 
 // ------------------------------------
 // Header
@@ -203,6 +208,8 @@ h4 {
   image-rendering: -webkit-optimize-contrast;
 }
 
+/* DFSKLARD: We are not using this phone strategy:
+
 // On phones, the header is displayed inside of the drawer. We lay its
 // contents out vertically.
 @media @phone {
@@ -211,9 +218,13 @@ h4 {
       padding: 0;
     }
   }
+
+  /* DFSKLARD: no need to do this, we want the horiz header for formed.org flavor.
   .Header-navigation {
     display: none;
   }
+  
+
   .Header-title {
     padding: 13px 10px;
     font-size: 16px;
@@ -241,19 +252,24 @@ h4 {
     margin: 10px 0;
   }
 }
+*/
+
+
+
 
 // On other devices, we stick the header up the top of the page, overlaying
 // the page toolbar that we styled earlier. We lay its contents out
 // horizontally.
+/*
 @media @phone {
   .App-drawer {
     & when (@config-colored-header = true) {
       .light-contents(@header-color, @header-control-bg, @header-control-color);
     }
   }
-}
+}  */
 
-@media @tablet-up {
+@media @phone-up {
   .App-navigation {
     display: none;
   }
@@ -327,6 +343,7 @@ h4 {
 // On phones, the content area overlays the drawer, so we must give it a
 // background and min-height so it cannot be seen through. When the drawer is
 // meant to be open, we slide the content to the right to reveal the drawer.
+/*
 @media @phone {
   .App-content {
     background: @body-bg;
@@ -335,3 +352,4 @@ h4 {
     padding-bottom: 50px;
   }
 }
+*/
