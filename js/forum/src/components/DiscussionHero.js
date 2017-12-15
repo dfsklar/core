@@ -42,6 +42,13 @@ export default class DiscussionHero extends Component {
 
   /**
    * Build an item list for the contents of the discussion hero.
+   * 
+   * this.props.discussion has a problem:
+   * Occasionally discussion.payload does not have an "included" section.
+   * 
+   * The problem is that everything is ruined when the "autofollow" is done.
+   * The autofollow post's response comes back with no included section.
+   * 
    *
    * @return {ItemList}
    */
@@ -50,6 +57,10 @@ export default class DiscussionHero extends Component {
     const discussion = this.props.discussion;
     const startPost = discussion.startPost();
     const badges = discussion.badges().toArray();
+
+    if (!discussion.payload.included) {
+      const sklardebug = discussion;
+    }
 
     // When the API responds with a discussion, it will also include a number of
     // posts. Some of these posts are included because they are on the first
@@ -87,7 +98,10 @@ export default class DiscussionHero extends Component {
     if (startingPostUserName) {
       items.add('author', <div className="DiscussionHero-author">{startingPostUserName}</div>);
 
-      // m.trust allows you to ask mithril to take the raw html and not try to protect it
+      // DFSKLARD: m.trust allows you to ask mithril to take the raw html and not try to protect it
+      if (includedPosts.length < 1) {
+        alert("FATAL ERROR:  Please report error 877421 to Formed.org personnel.");
+      }
       items.add('startingpost', 
         <div className="DiscussionHero-StartingPost">
             {m.trust(includedPosts[0].data.attributes.contentHtml)}
