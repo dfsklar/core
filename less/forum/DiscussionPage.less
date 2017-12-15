@@ -25,7 +25,7 @@
 
 
 @media @phone {
-  .DiscussionPage {
+  .DiscussionPage-FormFactorNotSupported {
     display: none;
   }  
   .DiscussionPage-nav {
@@ -79,7 +79,18 @@
 @media @tablet-up {
   .DiscussionPage-stream {
     margin-right: 225px;
-    padding-top: 220px;
+    padding-top: 220px;  // DFSKLARD: this padding needs to become dynamic based on the fixed header's height.
+    .Placeholder {
+      font-size: 24px;
+      color: grey;
+      margin-top: 0px;
+    }
+  }
+}
+@media @phone {
+  .DiscussionPage-stream {
+    margin-right: 10px;
+    padding-top: 190px;  // DFSKLARD: this padding needs to become dynamic based on the fixed header's height.
     .Placeholder {
       font-size: 24px;
       color: grey;
