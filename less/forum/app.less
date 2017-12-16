@@ -24,6 +24,12 @@
 @import "UserCard.less";
 @import "UserPage.less";
 
+@media @phone {
+    .holder-marketing-block {
+        margin-bottom: 8px;
+    }
+}
+
 .Dropdown-menu {
     .item-following, .item-tags, .item-allDiscussions, .item-subscription {
         display: none !important;
@@ -38,6 +44,17 @@
         right: 0px;
     }
 }
+
+@media @phone {
+    .DiscussionList {
+        .Button.IndexPage-newDiscussion {
+            top: -52px;
+            right: 10px;
+        }
+    }        
+}
+
+
 
 .DiscussionHero-items {
     .Dropdown-toggle {
