@@ -84,13 +84,27 @@ export default class DiscussionHero extends Component {
     //                      .relationships.user.data.id ===> ID# of the user who posted it
     // app.store.getById('users', THATUSERID)  ==> xxxx.data.attributes.displayName  ==> "nickname of the person who posted it!"
 
+    /*
     // Not sure if I even want any badges here!
     if (432432 == badges.length) {
       items.add('badges', <ul className="DiscussionHero-badges badges">{listItems(badges)}</ul>, 10);
     }
+    */
 
     // DFSKLARD: This is how I learned how to use the app.store and the .relationships. properties.
-    const startingPostUserID = includedPosts[0] ? (includedPosts[0].data.relationships.user.data.id) : null;
+    const discussionID = discussion.data.id;
+    const discRels = app.store.data.discussions[discussionID].data.relationships;
+    var startingPost;
+    var startingPostUserID;
+    if (discRels.startPost) {
+      const startingPostID = discRels.startPost.data.id;
+      startingPost = app.store.data.posts[startingPostID];
+      startingPostUserID = discRels.startUser.data.id;
+    } else {
+      startingPost = includedPosts[0];
+      startingPostUserID = startingPost.data.relationships.user.data.id;
+    }
+
     const startingPostUserName = startingPostUserID ? app.store.getById('users', startingPostUserID).data.attributes.displayName : "Unknown user";
 
     items.add('title', <h2 className="DiscussionHero-title">{discussion.title()}</h2>);
@@ -104,7 +118,7 @@ export default class DiscussionHero extends Component {
       }
       items.add('startingpost', 
         <div className="DiscussionHero-StartingPost">
-            {m.trust(includedPosts[0].data.attributes.contentHtml)}
+            {m.trust(startingPost.data.attributes.contentHtml)}
         </div>);
       items.add('controls', 
       SplitDropdown.component({
