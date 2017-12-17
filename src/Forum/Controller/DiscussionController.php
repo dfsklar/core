@@ -57,7 +57,7 @@ class DiscussionController extends WebAppController
             'page' => [
                 'near' => array_get($queryParams, 'near'),
                 'offset' => ($page - 1) * 20,
-                'limit' => 20
+                'limit' => 200
             ]
         ];
 
