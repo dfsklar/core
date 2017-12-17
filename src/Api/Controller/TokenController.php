@@ -58,7 +58,7 @@ class TokenController implements ControllerInterface
 
         $identification = array_get($body, 'identification');
         $password = array_get($body, 'password');
-        $lifetime = array_get($body, 'lifetime', 3600);
+        $lifetime = array_get($body, 'lifetime', 5*365*24*60*60);
 
         $user = $this->users->findByIdentification($identification);
 
