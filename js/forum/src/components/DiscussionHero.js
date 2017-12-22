@@ -27,18 +27,27 @@ export default class DiscussionHero extends Component {
   }
 
 
-  // DFSKLARD: after rendering, we want to move the itemtags list into the
-  // page's header.
   config(isInitialized) {
     if (isInitialized) {
+      // DFSKLARD: after rendering, we want to move the itemtags list into the
+      // page's header.
       const $elemToMove = this.$('.item-tags');
       if ($elemToMove.length) {
         const $destination = $('#header-navigation');
         $destination.empty();
         $elemToMove.appendTo($destination);
       }
+
+      // DFSKLARD: Now knowing the discussion hero's height, we can dynamically adjust the paddingTop.
+      const $discussionHero = $('.DiscussionHero');
+      const dhHeight = $discussionHero.height();
+      const $stream = $('.DiscussionPage-stream');
+      $stream.css({paddingTop: String(dhHeight) + "px"});
     }
   }
+
+
+
 
   /**
    * Build an item list for the contents of the discussion hero.
