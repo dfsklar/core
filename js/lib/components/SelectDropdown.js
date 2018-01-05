@@ -22,12 +22,15 @@ export default class SelectDropdown extends Dropdown {
 
   getButtonContent() {
     const activeChild = this.props.children.filter(child => child.props.active)[0];
-    let label = activeChild && activeChild.props.children || this.props.defaultLabel;
+    let label = 
+       (activeChild && (activeChild.props.label || activeChild.props.children))
+       || 
+       this.props.defaultLabel;
 
     if (label instanceof Array) label = label[0];
 
     return [
-      <span className="Button-label">{label}</span>,
+      <span className="SelectDropdown Button-label">{label}</span>,
       icon(this.props.caretIcon, {className: 'Button-caret'})
     ];
   }
