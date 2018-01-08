@@ -1,6 +1,7 @@
 <?php
 $discussion = $document->data;
 $postsCount = count($discussion->relationships->posts->data);
+// DFSKLARD: This use of hardwired 20 on line 27 is inexcusable!
 ?>
 <div class="container">
     <h2>{{ $discussion->attributes->title }}</h2>

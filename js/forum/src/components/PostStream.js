@@ -192,11 +192,13 @@ class PostStream extends Component {
       context.fadedIn = true;
     }
 
-    let lastTime;
+    // let lastTime;
 
     this.visibleEnd = this.sanitizeIndex(this.visibleEnd);
     this.viewingEnd = this.visibleEnd === this.count();
 
+    // DFSKLARD: Here is where we are looking into changing the order in which posts are displayed.
+    // DFSKLARD-DEC22
     const posts = this.posts();
     const postIds = this.discussion.postIds();
 
@@ -217,6 +219,8 @@ class PostStream extends Component {
         attrs['data-id'] = post.id();
         attrs['data-type'] = post.contentType();
 
+        // DFSKLARD: ELIMINATE THE TIME GAP INDICATORS:
+        /*
         // If the post before this one was more than 4 hours ago, we will
         // display a 'time gap' indicating how long it has been in between
         // the posts.
@@ -232,6 +236,9 @@ class PostStream extends Component {
         }
 
         lastTime = time;
+
+        */
+
       } else {
         attrs.key = 'post' + postIds[this.visibleStart + i];
 

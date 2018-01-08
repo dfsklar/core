@@ -65,6 +65,10 @@ class ShowDiscussionController extends AbstractResourceController
     {
         $this->discussions = $discussions;
         $this->posts = $posts;
+        // DFSKLARD: Override default limit; currently this prototype
+        // doesn't support any pagination for the posts within a discussion because
+        // we are severely re-ordering posts to distinguish comments/replies.
+        $this->limit = 2000;
     }
 
     /**

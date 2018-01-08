@@ -70,23 +70,12 @@ export default class DiscussionList extends Component {
     }
 
 
-    // DFSKLARD: the POST button on the group's home forum page (list of sessions page)
-    let button_newDiscussion = 
-      Button.component({
-        children: [ <span>POST</span> ],
-        icon: 'edit',
-        className: 'Button Button--primary IndexPage-newDiscussion',
-        itemClassName: 'App-primaryControl',
-        onclick: this.parentIndexPage.newDiscussion.bind(this.parentIndexPage)
-      })
-
     if (this.discussions.length === 0 && !this.loading) {
       const text = app.translator.trans('core.forum.discussion_list.empty_text');
       return (
         <div className="DiscussionList">
           {Placeholder.component({text})}
-          { this.canStartDiscussion ? button_newDiscussion : '' }
-          </div>
+        </div>
       );
     }
 
@@ -104,7 +93,6 @@ export default class DiscussionList extends Component {
         <div className="DiscussionList-loadMore">
           {loading}
         </div>
-           { this.canStartDiscussion ? button_newDiscussion : '' }
       </div>
     );
   }

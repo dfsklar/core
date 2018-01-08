@@ -47,6 +47,8 @@ class DiscussionController extends WebAppController
      */
     protected function getView(Request $request)
     {
+        // DFSKLARD: Warning, this is hit only upon webapp initial bootstrap load!
+        // DFSKLARD: Did I set the 200 posts-per-page amount, overriding the default 20?
         $view = parent::getView($request);
 
         $queryParams = $request->getQueryParams();
@@ -56,8 +58,8 @@ class DiscussionController extends WebAppController
             'id' => (int) array_get($queryParams, 'id'),
             'page' => [
                 'near' => array_get($queryParams, 'near'),
-                'offset' => ($page - 1) * 20,
-                'limit' => 20
+                'offset' => ($page - 1) * 200,
+                'limit' => 200
             ]
         ];
 
@@ -77,16 +79,41 @@ class DiscussionController extends WebAppController
             ($queryString ? '?'.$queryString : '');
         };
 
-        $posts = [];
+        // DFSKLARD: I have proven that the generation of a $posts array is actually
+        // ignored downstream.  You can set it to null just before end of this routine
+        // and nothing changes.
 
+        // DFSKLARD: $posts used to be a regular linear array, but I'm now changing
+        // it to a hash with key of the message ID.
+
+        // DFSKLARD: Here is where we may want to reorganize the flat list of posts
+        // to create a hierarchy of comments/replies.
+        // DFSKLARD: WRONG - This returned result is actually IGNORED!
+        $regexpIsReply = '/^@.*?#(\d+) /';
         foreach ($document->included as $resource) {
             if ($resource->type === 'posts' && isset($resource->relationships->discussion) && isset($resource->attributes->contentHtml)) {
-                $posts[] = $resource;
+                if (preg_match($regexpIsReply, $resource->attributes->content, $matches)) {
+                    // WHOA!  This is a reply, not a comment.
+                    $origCommentID = intval($matches[1]);
+                    $posts[$origCommentID]->replies[] = $resource;
+                } else {
+                    // THIS IS A COMMENT (which may have its own set of replies).
+                    $resource->replies = [];
+                    $posts[$resource->id] = $resource;
+                }
+                // DFSKLARD NOTES: $resource->attributes->contentHtml
+                // $resource->id
+                // If $resource->attributes->content starts with @____#__
+                // then it is a reply.
+                // How best to do this regex?
             }
         }
 
         $view->title = $document->data->attributes->title;
         $view->document = $document;
+
+        // DFSKLARD: This next line aggregates the variables that were
+        // initialized above, so $view->content will have a ['posts'] entry, etc.
         $view->content = app('view')->make('flarum.forum::discussion', compact('document', 'page', 'getResource', 'posts', 'url'));
 
         return $view;

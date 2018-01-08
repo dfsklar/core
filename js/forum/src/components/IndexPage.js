@@ -130,6 +130,7 @@ export default class IndexPage extends Page {
   }
 
   view() {
+    const canStartDiscussion = app.forum.attribute('canStartDiscussion') || !app.session.user;
     return (
     <div className="IndexPage-Supercontainer">
       <div className="IndexPage-FormFactorNotSupported">
@@ -144,9 +145,22 @@ export default class IndexPage extends Page {
             <ul>{listItems(this.sidebarItems().toArray())}</ul>
           </nav>
           <div className="IndexPage-results sideNavOffset">
-            <div className="IndexPage-toolbar">
-              <ul className="IndexPage-toolbar-view">{listItems(this.viewItems().toArray())}</ul>
-              <ul className="IndexPage-toolbar-action">{listItems(this.actionItems().toArray())}</ul>
+            <div className="hidden-forever">
+               ** THIS IS THE GREY BOX FROM FORMED.ORG UI SPEC, containing
+               ** the full name of the current session *AND* the POST button.
+            </div>
+            <div className="IndexPage-results-header">
+              <div className="session-name">
+                 {this.current_tag.data.attributes.name}: Discussion Questions
+              </div>
+              {Button.component({
+                children:  [ <span>NEW POST</span> ],
+                icon: 'edit',
+                className: 'Button Button--primary IndexPage-newDiscussion',
+                itemClassName: 'App-primaryControl',
+                onclick: this.newDiscussion.bind(this),
+                disabled: !canStartDiscussion
+              })}
             </div>
             {app.cache.discussionList.render()}
           </div>
