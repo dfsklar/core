@@ -149,10 +149,11 @@ export default class IndexPage extends Page {
                ** THIS IS THE GREY BOX FROM FORMED.ORG UI SPEC, containing
                ** the full name of the current session *AND* the POST button.
             </div>
-            <div className="IndexPage-results-header">
+            <div className="IndexPage-results-header IndexPage-results-child">
               <div className="session-name">
                  {this.current_tag.data.attributes.name}: Discussion Questions
               </div>
+              <div className="button-create-new-discussion">
               {Button.component({
                 children:  [ <span>NEW POST</span> ],
                 icon: 'edit',
@@ -160,9 +161,11 @@ export default class IndexPage extends Page {
                 itemClassName: 'App-primaryControl',
                 onclick: this.newDiscussion.bind(this),
                 disabled: !canStartDiscussion
-              })}
+              })}</div>
             </div>
-            {app.cache.discussionList.render()}
+            <div className="IndexPage-results-body IndexPage-results-child">
+              {app.cache.discussionList.render()}
+            </div>
           </div>
         </div>
       </div>
