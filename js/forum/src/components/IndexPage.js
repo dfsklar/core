@@ -141,9 +141,6 @@ export default class IndexPage extends Page {
       <div className="IndexPage">
         {this.hero()}
         <div className="container">
-          <nav className="IndexPage-nav sideNav">
-            <ul>{listItems(this.sidebarItems().toArray())}</ul>
-          </nav>
           <div className="IndexPage-results sideNavOffset">
             <div className="hidden-forever">
                ** THIS IS THE GREY BOX FROM FORMED.ORG UI SPEC, containing
@@ -242,18 +239,6 @@ export default class IndexPage extends Page {
    */
   sidebarItems() {
     const items = new ItemList();
-    const canStartDiscussion = app.forum.attribute('canStartDiscussion') || !app.session.user;
-
-    items.add('newDiscussion',
-      Button.component({
-        children: app.translator.trans(canStartDiscussion ? 'core.forum.index.start_discussion_button' : 'core.forum.index.cannot_start_discussion_button'),
-        icon: 'edit',
-        className: 'Button Button--primary IndexPage-newDiscussion',
-        itemClassName: 'App-primaryControl',
-        onclick: this.newDiscussion.bind(this),
-        disabled: !canStartDiscussion
-      })
-    );
 
     items.add('nav',
       SelectDropdown.component({
@@ -267,26 +252,13 @@ export default class IndexPage extends Page {
   }
 
   /**
-   * Build an item list for the navigation in the sidebar of the index page. By
-   * default this is just the 'All Discussions' link.
-   *
+   * Build an item list for the navigation in the sidebar of the index page.
+   * Formed.org app does not use this! (DFSKLARD)
+   * 
    * @return {ItemList}
    */
   navItems() {
     const items = new ItemList();
-    const params = this.stickyParams();
-
-    /*
-    items.add('allDiscussions',
-      LinkButton.component({
-        href: app.route('index', params),
-        children: app.translator.trans('core.forum.index.all_discussions_link'),
-        icon: 'comments-o'
-      }),
-      100
-    );
-    */
-    
     return items;
   }
 
@@ -294,36 +266,13 @@ export default class IndexPage extends Page {
    * Build an item list for the part of the toolbar which is concerned with how
    * the results are displayed. By default this is just a select box to change
    * the way discussions are sorted.
+   * 
+   * DFSKLARD:  In formed.org app, we do not use this.
    *
    * @return {ItemList}
    */
   viewItems() {
     const items = new ItemList();
-    const sortMap = app.cache.discussionList.sortMap();
-
-    const sortOptions = {};
-    for (const i in sortMap) {
-      sortOptions[i] = app.translator.trans('core.forum.index_sort.' + i + '_button');
-    }
-
-    items.add('sort',
-      Dropdown.component({
-        buttonClassName: 'Button',
-        label: sortOptions[this.params().sort] || Object.keys(sortMap).map(key => sortOptions[key])[0],
-        children: Object.keys(sortOptions).map(value => {
-          const label = sortOptions[value];
-          const active = (this.params().sort || Object.keys(sortMap)[0]) === value;
-
-          return Button.component({
-            children: label,
-            icon: active ? 'check' : true,
-            onclick: this.changeSort.bind(this, value),
-            active: active,
-          })
-        }),
-      })
-    );
-
     return items;
   }
 
