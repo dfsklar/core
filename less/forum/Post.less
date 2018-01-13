@@ -8,13 +8,12 @@ article.Post.CommentPost.editing {
 }
 
 article.Post.CommentPost > div {
-  padding-left: 20px;
+  padding-right: 12px;
 }
+ 
 
 .Post {
-  padding: 20px;
-  padding-bottom: 0px !important;
-  margin: -1px -20px;
+  padding-top: 20px;
   transition: 0.2s box-shadow, top 0.2s, opacity 0.2s;
   position: relative;
   top: 0;
@@ -28,7 +27,6 @@ article.Post.CommentPost > div {
 }
 
 .Post-header {
-  margin-bottom: 15px;
   color: @muted-color;
 
   &, a {
@@ -107,8 +105,12 @@ article.Post.CommentPost > div {
   overflow: auto;
   overflow-wrap: break-word;
 
-  p, ul, ol, blockquote {
+  ul, ol, blockquote {
     margin-bottom: 1em;
+  }
+  p {
+    margin-top: 0.5em;
+    margin-bottom: 0px !important;
   }
   a {
     border-bottom: 1px solid @control-bg;

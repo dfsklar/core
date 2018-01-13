@@ -197,6 +197,8 @@ export default class DiscussionPage extends Page {
         .slice(0, 20);
     }
 
+    
+
     // Set up the post stream for this discussion, along with the first page of
     // posts we want to display. Tell the stream to scroll down and highlight
     // the specific post that was routed to.
