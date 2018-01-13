@@ -229,34 +229,42 @@ class PostStream extends Component {
       }
     });
 
-
-    const items = posts.map((post, i) => {
-      let content;
-      const dataIndex = this.visibleStart + i;
+    function calcAttrs(post) {
       const attrs = {'data-index': dataIndex};
-
       if (post) {
         const time = post.time();
-        const PostComponent = app.postComponents[post.contentType()];
-        content = PostComponent ? PostComponent.component({post}) : '';
-
         attrs.key = 'post' + post.id();
         attrs.config = fadeIn;
         attrs['data-time'] = time.toISOString();
         attrs['data-number'] = post.number();
         attrs['data-id'] = post.id();
         attrs['data-type'] = post.contentType();
+      }
+      return attrs;
+    }
 
+    const items = [];
+    var dataIndex = this.visibleStart - 1;
+    posts.forEach(function(post) {
+      let content;
+      dataIndex += 1;
+      var attrs = calcAttrs(post);
+
+      if (post) {
+        const PostComponent = app.postComponents[post.contentType()];
+        content = PostComponent ? PostComponent.component({post}) : '';
         // DFSKLARD: I ELIMINATED THE TIME GAP INDICATORS HERE.
+        if (post.replies) {
 
+        }
       } else {
+        alert("PostStream fatal error 353423 -- Contact Sklar immediately.");
         attrs.key = 'post' + postIds[this.visibleStart + i];
-
         content = PostLoading.component();
       }
 
       // DFSKLARD added a class name that has the INDEX so we can do CSS manipulation based on index.
-      return <div className={"PostStream-item PostStream-item-"+String(dataIndex)} {...attrs}>{content}</div>;
+      items.push(<div className={"PostStream-item PostStream-item-"+String(dataIndex)} {...attrs}>{content}</div>);
     });
     // END OF: const items = ...
 
