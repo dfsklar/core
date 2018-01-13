@@ -7,12 +7,15 @@
   }
 }
 .PostStream-item {
-  &:not(:last-child) {
-    border-bottom: 1px solid @control-bg;
+  &:not(.PostStream-reply) {
+    &:not(:first-child) {
+      border-top: 1px solid @control-bg;
+      margin-top: 20px;
 
-    @media @phone {
-      margin: 0 -15px;
-      padding: 0 15px;
+      @media @phone {
+        margin: 0 -15px;
+        padding: 0 15px;
+      }
     }
   }
 

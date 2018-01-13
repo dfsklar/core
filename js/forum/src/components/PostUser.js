@@ -64,17 +64,8 @@ export default class PostUser extends Component {
   config(isInitialized) {
     if (isInitialized) return;
 
-    let timeout;
-
-    this.$()
-      .on('mouseover', 'h3 a, .UserCard', () => {
-        clearTimeout(timeout);
-        timeout = setTimeout(this.showCard.bind(this), 500);
-      })
-      .on('mouseout', 'h3 a, .UserCard', () => {
-        clearTimeout(timeout);
-        timeout = setTimeout(this.hideCard.bind(this), 250);
-      });
+    // DFSKLARD:  We do not want this feature: hovering over a username shouldn't popup that user's detail hoverbox.
+    return;
   }
 
   /**

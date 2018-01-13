@@ -219,12 +219,13 @@ class PostStream extends Component {
         }
       }
       if (!bool_isReply) {
-          // This is a comment, not a reply.
+        // This is a comment, not a reply.
         posts.unshift(post);
         post.replies = [];
         posts_keyed_by_id[post.data.attributes.id] = post;
       } else {
         const target_post = posts_keyed_by_id[target_comment_post_id];
+        posts_keyed_by_id[post.data.attributes.id] = target_post;
         target_post.replies.push(post);
       }
     });
