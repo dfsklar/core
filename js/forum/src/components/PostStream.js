@@ -251,11 +251,18 @@ class PostStream extends Component {
       var attrs = calcAttrs(post);
 
       if (post) {
-        const PostComponent = app.postComponents[post.contentType()];
+        var PostComponent = app.postComponents[post.contentType()];
         content = PostComponent ? PostComponent.component({post}) : '';
         // DFSKLARD: I ELIMINATED THE TIME GAP INDICATORS HERE.
+        // DFSKLARD added a class name that has the INDEX so we can do CSS manipulation based on index.
+        items.push(<div className={"PostStream-item PostStream-item-"+String(dataIndex)} {...attrs}>{content}</div>);
         if (post.replies) {
-
+          post.replies.forEach(function(post,idx){
+            var PostComponent = app.postComponents[post.contentType()];
+            attrs = calcAttrs(post);
+            content = PostComponent ? PostComponent.component({post}) : '';
+            items.push(<div className={"PostStream-item PostStream-reply PostStream-item-"+String(dataIndex)} {...attrs}>{content}</div>);
+          });
         }
       } else {
         alert("PostStream fatal error 353423 -- Contact Sklar immediately.");
@@ -263,8 +270,6 @@ class PostStream extends Component {
         content = PostLoading.component();
       }
 
-      // DFSKLARD added a class name that has the INDEX so we can do CSS manipulation based on index.
-      items.push(<div className={"PostStream-item PostStream-item-"+String(dataIndex)} {...attrs}>{content}</div>);
     });
     // END OF: const items = ...
 
