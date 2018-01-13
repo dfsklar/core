@@ -7,8 +7,13 @@ article.Post.CommentPost.editing {
   display: none !important;
 }
 
+article.Post.CommentPost > div {
+  padding-left: 20px;
+}
+
 .Post {
   padding: 20px;
+  padding-bottom: 0px !important;
   margin: -1px -20px;
   transition: 0.2s box-shadow, top 0.2s, opacity 0.2s;
   position: relative;
@@ -303,6 +308,10 @@ article.Post.CommentPost.editing {
       margin-left: -5px;
       display: inline-block;
       vertical-align: top;
+      .Button {
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+      }
     }
   }
   .Post:hover &, &.open {
@@ -369,9 +378,6 @@ article.Post.CommentPost.editing {
 @avatar-column-width: 85px;
 
 @media @tablet-up {
-  .Post {
-    padding-left: 0px;
-  }
   .CommentPost:not(.Post--hidden), .ReplyPlaceholder {
     min-height: 64px + 40px; // avatar height + padding
   }
