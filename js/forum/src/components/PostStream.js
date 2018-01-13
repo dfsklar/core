@@ -197,10 +197,38 @@ class PostStream extends Component {
     this.visibleEnd = this.sanitizeIndex(this.visibleEnd);
     this.viewingEnd = this.visibleEnd === this.count();
 
-    // DFSKLARD: Here is where we are looking into changing the order in which posts are displayed.
-    // DFSKLARD-DEC22
-    const posts = this.posts();
+    const posts_flarumnativeorder = this.posts();
     const postIds = this.discussion.postIds();
+
+    // DFSKLARD: Here is where we are changing the order in which posts are displayed.
+    const regex_identify_reply = new RegExp(/^\@.*?\#(\d+)/);
+    const posts = [];
+    const posts_keyed_by_id = {};
+    posts_flarumnativeorder.forEach(function(post, idx){
+      if (idx == 0)
+        // Ignore the very first post, don't display in this stream because it is already shown in the HERO.
+        return;
+      var bool_isReply = false;
+      const content = post.data.attributes.content;
+      var target_comment_post_id = null;
+      if (content.startsWith('@')) {
+        const match = content.match(regex_identify_reply);
+        if (match) {
+          bool_isReply = true;
+          target_comment_post_id = match[1];
+        }
+      }
+      if (!bool_isReply) {
+          // This is a comment, not a reply.
+        posts.unshift(post);
+        post.replies = [];
+        posts_keyed_by_id[post.data.attributes.id] = post;
+      } else {
+        const target_post = posts_keyed_by_id[target_comment_post_id];
+        target_post.replies.push(post);
+      }
+    });
+
 
     const items = posts.map((post, i) => {
       let content;
@@ -219,25 +247,7 @@ class PostStream extends Component {
         attrs['data-id'] = post.id();
         attrs['data-type'] = post.contentType();
 
-        // DFSKLARD: ELIMINATE THE TIME GAP INDICATORS:
-        /*
-        // If the post before this one was more than 4 hours ago, we will
-        // display a 'time gap' indicating how long it has been in between
-        // the posts.
-        const dt = time - lastTime;
-
-        if (dt > 1000 * 60 * 60 * 24 * 4) {
-          content = [
-            <div className="PostStream-timeGap">
-              <span>{app.translator.trans('core.forum.post_stream.time_lapsed_text', {period: moment.duration(dt).humanize()})}</span>
-            </div>,
-            content
-          ];
-        }
-
-        lastTime = time;
-
-        */
+        // DFSKLARD: I ELIMINATED THE TIME GAP INDICATORS HERE.
 
       } else {
         attrs.key = 'post' + postIds[this.visibleStart + i];
