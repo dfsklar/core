@@ -21,7 +21,15 @@ export default {
     const items = new ItemList();
 
     // DFSKLARD: If user is not a member of group, NO actions available to them.
-    if (app.cache.discussionList && app.cache.discussionList.canStartDiscussion) {
+    const primaryTagID = post.discussion().data.relationships.tags.data[0].id;
+    const primaryTag = app.store.getBy('tags', 'id', primaryTagID);
+    const groupSlug = primaryTag.data.attributes.slug;
+    this.matchingGroup = app.store.getBy('groups', 'slug', groupSlug);
+    this.loggedinUserMembershipList = app.session.user.data.relationships.groups.data;
+    this.isMemberOfGroup = this.loggedinUserMembershipList.some(group => (group.id == this.matchingGroup.data.id));
+    post.discussion().loggedinUserIsMemberOfGroup = this.isMemberOfGroup;
+    
+    if (this.isMemberOfGroup) {
       ['user', 'moderation', 'destructive'].forEach(section => {
         const controls = this[section + 'Controls'](post, context).toArray();
         if (controls.length) {

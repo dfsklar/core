@@ -66,8 +66,9 @@ export default class Post extends Component {
                 </ul>
               </aside>
 
-              { this.footerItems().length ? 
-                <footer className="Post-footer"><ul>{listItems(this.footerItems().toArray())}</ul></footer> : '' }
+              { this.footerItems().isEmpty() ? ' ' : 
+              <footer className="Post-footer"><ul>{listItems(this.footerItems().toArray())}</ul></footer> }
+
             </div>
           );
         })()}
