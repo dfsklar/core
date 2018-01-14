@@ -57,21 +57,17 @@ export default {
     // for the discussion page itself. We don't want it to show up for
     // discussions in the discussion list, etc.
 
-    // DFSKLARD: Don't show this at all if DiscussionList object has canStartDiscussion==false
-    if (!(app.cache.discussionList)) {
-      const groupSlug = discussion.payload.included.find(function(x){return x.type=='groups'}).attributes.slug;
-      app.cache.discussionList = new DiscussionList({
-        params: {
-          filter: undefined,
-          q: undefined,
-          sort: undefined,
-          tags: groupSlug
-        }
-      });
-    }
+    // DFSKLARD: Determine the group to which this discussion belongs.
+    const primaryTagID = discussion.data.relationships.tags.data[0].id;
+    const primaryTag = app.store.getBy('tags', 'id', primaryTagID);
+    const groupSlug = primaryTag.data.attributes.slug;
+    this.matchingGroup = app.store.getBy('groups', 'slug', groupSlug);
+    this.loggedinUserMembershipList = app.session.user.data.relationships.groups.data;
+    this.isMemberOfGroup = this.loggedinUserMembershipList.some(group => (group.id == this.matchingGroup.data.id));
+    
     if (context instanceof DiscussionHero)
       items.add('comment',
-        ( app.cache.discussionList && app.cache.discussionList.canStartDiscussion )
+        ( this.isMemberOfGroup )
         ?
         Button.component({
           dfsklard: 'DFSKLARD this is the COMMENT button in the Discussion Hero',
@@ -89,6 +85,8 @@ export default {
 
     return items;
   },
+
+
 
   /**
    * Get controls for a discussion pertaining to moderation (e.g. rename, lock).
@@ -113,6 +111,8 @@ export default {
 
     return items;
   },
+
+
 
   /**
    * Get controls for a discussion which are destructive (e.g. delete).
