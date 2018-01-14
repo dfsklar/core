@@ -160,7 +160,9 @@ export default class IndexPage extends Page {
                 disabled: !canStartDiscussion
               })}</div>
             </div>
-            <div className="IndexPage-results-body IndexPage-results-child">
+          </div>
+          <div className="IndexPage-results-body">
+            <div className="IndexPage-results-child">
               {app.cache.discussionList.render()}
             </div>
           </div>
