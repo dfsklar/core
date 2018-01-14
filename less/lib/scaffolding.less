@@ -52,10 +52,13 @@ p {
 .container {
   margin-right: auto;
   margin-left: auto;
-  // DFSKLARD:
-  // padding-left: 15px;
-  // padding-right: 15px;
+
   .clearfix();
+
+  @media @phone {
+    margin-right: 10px;
+    margin-left: 10px;
+  }
 
   @media @tablet {
     width: @screen-tablet - 40px;
