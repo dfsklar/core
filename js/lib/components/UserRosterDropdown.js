@@ -3,6 +3,8 @@ import username from 'flarum/helpers/username';
 import Dropdown from 'flarum/components/Dropdown';
 import Button from 'flarum/components/Button';
 import ItemList from 'flarum/utils/ItemList';
+import icon from 'flarum/helpers/icon';
+
 
 /**
  * This shows a button with the roster's size (number of users)
@@ -14,8 +16,8 @@ export default class UserRosterDropdown extends Dropdown {
     super.initProps(props);
 
     props.className = 'UserRosterDropdown';
-    props.buttonClassName = 'Button Button--user Button--flat';
-    props.menuClassName = 'Dropdown-menu--right';
+    props.buttonClassName = 'Button Dropdown-toggle';
+    props.menuClassName = 'Dropdown-menu dropdown-menu';
   }
 
   view() {
@@ -26,10 +28,10 @@ export default class UserRosterDropdown extends Dropdown {
 
   getButtonContent() {
     const user = app.session.user;
-
+    const suffix = (this.props.userList.length==1 ? ' member' : ' members');
     return [
-      avatar(user), ' ',
-      <span className="Button-label disable-interaction">{username(user)}</span>
+      <span className="Button-label">{String(this.props.userList.length) + suffix}</span>,
+      icon('sort', {className: 'Button-caret'})
     ];
   }
 
@@ -41,14 +43,15 @@ export default class UserRosterDropdown extends Dropdown {
   items() {
     const items = new ItemList();
 
-    items.add('logOut',
-      Button.component({
-        icon: 'sign-out',
-        children: app.translator.trans('core.admin.header.log_out_button'),
-        onclick: app.session.logout.bind(app.session)
-      }),
-      -100
+    this.props.userList.forEach(function(val){
+      const userinfo = app.store.getById('users',val.id);
+      items.add(val.id,
+        Button.component({
+          children: [ userinfo.data.attributes.username ]
+       }),
+       -100
     );
+    });
 
     return items;
   }
