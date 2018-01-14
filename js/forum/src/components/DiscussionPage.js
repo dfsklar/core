@@ -194,7 +194,7 @@ export default class DiscussionPage extends Page {
         .filter(record => record.type === 'posts' && record.relationships && record.relationships.discussion)
         .map(record => app.store.getById('posts', record.id))
         .sort((a, b) => a.id() - b.id())
-        .slice(0, 20);
+        .slice(0, 99999);  //DFSKLARD: no limit, we are not yet supporting pagination
     }
 
     

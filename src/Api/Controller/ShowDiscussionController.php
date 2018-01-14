@@ -109,7 +109,7 @@ class ShowDiscussionController extends AbstractResourceController
     private function includePosts(Discussion $discussion, ServerRequestInterface $request, array $include)
     {
         $actor = $request->getAttribute('actor');
-        $limit = $this->extractLimit($request);
+        $limit = 99999;   // DFSKLARD: used to be: $this->extractLimit($request);
         $offset = $this->getPostsOffset($request, $discussion, $limit);
 
         $allPosts = $this->loadPostIds($discussion, $actor);
