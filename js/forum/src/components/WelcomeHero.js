@@ -20,12 +20,6 @@ export default class WelcomeHero extends Component {
     return (
       <header className="Hero WelcomeHero">
         <div class="container">
-          {Button.component({
-            icon: 'times',
-            onclick: slideUp,
-            className: 'Hero-close Button Button--icon Button--link'
-          })}
-
           <div className="containerNarrow">
             <h2 className="Hero-title">Looking for Formed.org Communities?</h2>
             <div className="Hero-subtitle">
