@@ -225,8 +225,10 @@ class PostStream extends Component {
         posts_keyed_by_id[post.data.attributes.id] = post;
       } else {
         const target_post = posts_keyed_by_id[target_comment_post_id];
-        posts_keyed_by_id[post.data.attributes.id] = target_post;
-        target_post.replies.push(post);
+	if (target_post) {
+              posts_keyed_by_id[post.data.attributes.id] = target_post;
+              target_post.replies.push(post);
+	}
       }
     });
 
