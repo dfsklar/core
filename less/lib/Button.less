@@ -109,12 +109,6 @@
   color: @color;
   background: @background;
 
-  &:hover,
-  &:focus,
-  &.focus {
-    background-color: darken(fadein(@background, 5%), 5%);
-  }
-
   &:active,
   &.active,
   .open > .Dropdown-toggle& {
@@ -142,21 +136,8 @@
 }
 .Button--link {
   background: transparent !important;
-
-  &:hover {
-    background: transparent !important;
-    color: @link-color;
-  }
-  &:active,
-  &.active,
-  &:focus,
-  &.focus,
-  .open > &.Dropdown-toggle {
-    background: transparent !important;
-    .box-shadow(none);
-    color: @link-color;
-  }
 }
+
 .Button--text {
   background: transparent !important;
   padding: 0;
