@@ -27,8 +27,11 @@ export default class WelcomeHero extends Component {
           })}
 
           <div className="containerNarrow">
-            <h2 className="Hero-title">{app.forum.attribute('welcomeTitle')}</h2>
-            <div className="Hero-subtitle">{m.trust(app.forum.attribute('welcomeMessage'))}</div>
+            <h2 className="Hero-title">Looking for Formed.org Communities?</h2>
+            <div className="Hero-subtitle">
+              To access formed.org community groups, please login to formed.org and visit
+              the home page for your parish or church organization.
+            </div>
           </div>
         </div>
       </header>

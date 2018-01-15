@@ -72,6 +72,9 @@ export default class HeaderSecondary extends Component {
         <span className='username'>{username(app.session.user)}</span>
       ));
     } else {
+
+      /* DFSKLARD: we never show signup or login in the flarum-side UI
+      
       if (app.forum.attribute('allowSignUp')) {
         items.add('signUp',
           Button.component({
@@ -89,6 +92,9 @@ export default class HeaderSecondary extends Component {
           onclick: () => app.modal.show(new LogInModal())
         }), 0
       );
+      */
+
+
     }
 
     return items;
