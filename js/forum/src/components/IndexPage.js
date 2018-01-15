@@ -184,7 +184,7 @@ export default class IndexPage extends Page {
 
     // DFSKLARD: Create a button for returning to formed.org parish homepage
     const $destination = $('#header-navigation');
-    const destURL = app.siteSpecifics.fetchFormedURL() + "/home";
+    const destURL = app.siteSpecifics.fetchFormedURL() + "/home?linkId=custom-content";
     $destination.empty();
     $destination.append('<a href="' + destURL + '" class=returntoformed>&lt; RETURN TO COMMUNITY</a>');
 
