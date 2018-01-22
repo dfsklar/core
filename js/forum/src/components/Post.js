@@ -44,6 +44,8 @@ export default class Post extends Component {
     return (
       <article {...attrs}>
         {this.subtree.retain() || (() => {
+
+          // PostControls.controls will return appropriate controls such as edit etc.
           const controls = PostControls.controls(this.props.post, this).toArray();
 
           return (

@@ -7,6 +7,9 @@ import PostStreamScrubber from 'flarum/components/PostStreamScrubber';
 import LoadingIndicator from 'flarum/components/LoadingIndicator';
 import SplitDropdown from 'flarum/components/SplitDropdown';
 import DiscussionControls from 'flarum/utils/DiscussionControls';
+import PostControls from 'flarum/utils/PostControls';
+import Dropdown from 'flarum/components/Dropdown';
+
 
 /**
  * The `DiscussionHero` component displays the hero on a discussion page.
@@ -100,6 +103,7 @@ export default class DiscussionHero extends Component {
     }
     */
 
+
     // DFSKLARD: This is how I learned how to use the app.store and the .relationships. properties.
     const discussionID = discussion.data.id;
     const discRels = app.store.data.discussions[discussionID].data.relationships;
@@ -114,21 +118,32 @@ export default class DiscussionHero extends Component {
       startingPostUserID = startingPost.data.relationships.user.data.id;
     }
 
+
+    // PostControls.controls will return appropriate controls such as edit etc.
+    const controls = PostControls.controls(startingPost, this).toArray();
+    const editButton = controls.filter(function(x){return x.itemName == 'edit';})
+    // The editButton variable now contains an array: either empty or having just one item.
+
     const startingPostUserName = startingPostUserID ? app.store.getById('users', startingPostUserID).data.attributes.displayName : "Unknown user";
 
     items.add('title', <h2 className="DiscussionHero-title">{discussion.title()}</h2>);
 
     if (startingPostUserName) {
       items.add('author', <div className="DiscussionHero-author">{startingPostUserName}</div>);
-
-      // DFSKLARD: m.trust allows you to ask mithril to take the raw html and not try to protect it
       if (includedPosts.length < 1) {
         alert("FATAL ERROR:  Please report error 877421 to Formed.org personnel.");
       }
+
+      if (editButton.length) {
+        items.add('post-control-edit', editButton[0]);
+      }
+
+      // DFSKLARD: m.trust allows you to ask mithril to take the raw html and not try to protect it
       items.add('startingpost', 
         <div className="DiscussionHero-StartingPost">
             {m.trust(startingPost.data.attributes.contentHtml)}
         </div>);
+
       items.add('controls', 
       SplitDropdown.component({
         children: DiscussionControls.controls(discussion, this).toArray(),
