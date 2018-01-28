@@ -77,6 +77,7 @@ export default class TextEditor extends Component {
       })
     );
 
+    /*
     if (this.props.preview) {
       items.add('preview',
         Button.component({
@@ -87,6 +88,7 @@ export default class TextEditor extends Component {
         })
       );
     }
+    */
 
     return items;
   }
