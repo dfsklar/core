@@ -192,8 +192,6 @@ class PostStream extends Component {
       context.fadedIn = true;
     }
 
-    // let lastTime;
-
     this.visibleEnd = this.sanitizeIndex(this.visibleEnd);
     this.viewingEnd = this.visibleEnd === this.count();
 
@@ -205,10 +203,12 @@ class PostStream extends Component {
     const posts = [];
     const posts_keyed_by_id = {};
     posts_flarumnativeorder.forEach(function(post, idx){
-      if (idx == 0)
+      if (idx == 0) {
         // Ignore the very first post, don't display in this stream because it is already shown in the HERO.
         return;
+      }
       var bool_isReply = false;
+      post.replies = [];
       const content = post.data.attributes.content;
       var target_comment_post_id = null;
       if (content.startsWith('@')) {
@@ -219,16 +219,18 @@ class PostStream extends Component {
         }
       }
       if (!bool_isReply) {
-        // This is a comment, not a reply.
-        posts.unshift(post);
-        post.replies = [];
+        // ****** COMMENT
+        posts.unshift(post);  // unshift means "prepend to start of list"
+        post.replyLevel = 0;  // meaning "not a reply"
         posts_keyed_by_id[post.data.attributes.id] = post;
       } else {
+        // ****** REPLY
         const target_post = posts_keyed_by_id[target_comment_post_id];
-	if (target_post) {
-              posts_keyed_by_id[post.data.attributes.id] = target_post;
-              target_post.replies.push(post);
-	}
+        post.replyLevel = target_post.replyLevel + 1;
+      	if (target_post) {
+          posts_keyed_by_id[post.data.attributes.id] = post;
+          target_post.replies.push(post);
+	      }
       }
     });
 
@@ -248,6 +250,12 @@ class PostStream extends Component {
 
     const items = [];
     var dataIndex = this.visibleStart - 1;
+
+    // This is where we now take this hierarchical tree of comments/replies and transform it
+    // into a flat list (where nesting level is captured in an attribute but the tree is definitely linearized).
+    //
+    // Keep in mind that the array of posts is an array of comments; the replies are still part of this structure
+    // only due to the post.replies substructure.
     posts.forEach(function(post) {
       let content;
       dataIndex += 1;
@@ -265,6 +273,14 @@ class PostStream extends Component {
             attrs = calcAttrs(post);
             content = PostComponent ? PostComponent.component({post}) : '';
             items.push(<div className={"PostStream-item PostStream-reply PostStream-item-"+String(dataIndex)} {...attrs}>{content}</div>);
+            if (post.replies) {
+              post.replies.forEach(function(post,idx){
+                var PostComponent = app.postComponents[post.contentType()];
+                attrs = calcAttrs(post);
+                content = PostComponent ? PostComponent.component({post}) : '';
+                items.push(<div className={"PostStream-item PostStream-reply reply-level-2 PostStream-item-"+String(dataIndex)} {...attrs}>{content}</div>);
+              });
+            }
           });
         }
       } else {
