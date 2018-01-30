@@ -154,20 +154,17 @@
   }
 }
 .Button--primary {
-  background-color: white;
-  color: black;
+  .Button--color(@body-bg, @primary-color);
+  padding-left: 20px;
+  padding-right: 20px;
   font-weight: bold;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 17px;
-  padding-right: 17px;
-  &.IndexPage-newDiscussion {
-    .Button--color(@body-bg, @primary-color);
-    background-color: auto;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 8px;
-    padding-bottom: 8px;
+  &.Button-CreateComment {
+    background-color: white;
+    color: black;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 17px;
+    padding-right: 17px;
   }
   .Button-icon {
     display: none;

@@ -70,8 +70,8 @@ export default {
         ( this.isMemberOfGroup )
         ?
         Button.component({
-          dfsklard: 'DFSKLARD this is the COMMENT button in the Discussion Hero',
           icon: 'comment',
+          className: 'Button-CreateComment',
           children: app.translator.trans('core.forum.discussion_controls.comment_button'),
           title: app.translator.trans('core.forum.discussion_controls.comment_button'),
           onclick: this.replyAction.bind(discussion, true, false)
