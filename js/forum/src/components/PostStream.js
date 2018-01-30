@@ -226,11 +226,11 @@ class PostStream extends Component {
       } else {
         // ****** REPLY
         const target_post = posts_keyed_by_id[target_comment_post_id];
-        post.replyLevel = target_post.replyLevel + 1;
-      	if (target_post) {
-          posts_keyed_by_id[post.data.attributes.id] = post;
-          target_post.replies.push(post);
-	      }
+        if (target_post) {
+           post.replyLevel = (target_post.replyLevel || 0) + 1;
+           posts_keyed_by_id[post.data.attributes.id] = post;
+           target_post.replies.push(post);
+        }
       }
     });
 
