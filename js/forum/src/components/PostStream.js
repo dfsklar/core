@@ -227,9 +227,18 @@ class PostStream extends Component {
         // ****** REPLY
         const target_post = posts_keyed_by_id[target_comment_post_id];
         if (target_post) {
-           post.replyLevel = (target_post.replyLevel || 0) + 1;
-           posts_keyed_by_id[post.data.attributes.id] = post;
-           target_post.replies.push(post);
+          post.replyLevel = (target_post.replyLevel || 0) + 1;
+          posts_keyed_by_id[post.data.attributes.id] = post;
+          target_post.replies.push(post);
+          post.parent_post = target_post;
+          if (post.freshness > target_post.freshness) {
+            target_post.freshness = post.freshness;
+          }
+          var grandparent = target_post.parent_post;
+          if (grandparent) {
+            if (grandparent.freshness < post.freshness)
+              grandparent.freshness = post.freshness;
+          }
         }
       }
     });
@@ -268,6 +277,7 @@ class PostStream extends Component {
         // DFSKLARD added a class name that has the INDEX so we can do CSS manipulation based on index.
         items.push(<div className={"PostStream-item PostStream-item-"+String(dataIndex)} {...attrs}>{content}</div>);
         if (post.replies) {
+          var comment = post;
           post.replies.forEach(function(post,idx){
             var PostComponent = app.postComponents[post.contentType()];
             attrs = calcAttrs(post);
@@ -284,7 +294,7 @@ class PostStream extends Component {
           });
         }
       } else {
-        alert("PostStream fatal error 353423 -- Contact Sklar immediately.");
+        alert("PostStream fatal error 3534293 -- Contact Formed.org staff immediately.");
         attrs.key = 'post' + postIds[this.visibleStart + i];
         content = PostLoading.component();
       }
