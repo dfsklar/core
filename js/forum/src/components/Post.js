@@ -53,7 +53,7 @@ export default class Post extends Component {
               {this.content()}
               <aside className="Post-actions">
                 <ul>
-                  {listItems(this.actionItems().toArray())}
+                  {listItems(this.actionItems().toArray().reverse())}
                   {controls.length ? <li>
                     <Dropdown
                       className="Post-controls"
