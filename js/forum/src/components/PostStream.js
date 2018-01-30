@@ -207,6 +207,10 @@ class PostStream extends Component {
         // Ignore the very first post, don't display in this stream because it is already shown in the HERO.
         return;
       }
+
+      // This "recency" is the last-modification time calculated also based on the replies nested hereunder.
+      post.recency = post.data.attributes.time;
+
       var bool_isReply = false;
       post.replies = [];
       const content = post.data.attributes.content;
@@ -231,13 +235,16 @@ class PostStream extends Component {
           posts_keyed_by_id[post.data.attributes.id] = post;
           target_post.replies.push(post);
           post.parent_post = target_post;
-          if (post.freshness > target_post.freshness) {
-            target_post.freshness = post.freshness;
+          console.log("REPLY");
+          console.log(post.data.attributes.time);
+          if (post.recency > target_post.recency) {
+            target_post.recency = post.recency;
           }
           var grandparent = target_post.parent_post;
           if (grandparent) {
-            if (grandparent.freshness < post.freshness)
-              grandparent.freshness = post.freshness;
+            if (grandparent.recency < post.recency) {
+              grandparent.recency = post.recency;
+            }
           }
         }
       }
@@ -260,12 +267,17 @@ class PostStream extends Component {
     const items = [];
     var dataIndex = this.visibleStart - 1;
 
+    // RESORT the top level (i.e. the comments) based on the updated freshness.
+    var posts_sorted = posts.sort((a, b) => (a.recency > b.recency) ? -1 : 1);
+
     // This is where we now take this hierarchical tree of comments/replies and transform it
     // into a flat list (where nesting level is captured in an attribute but the tree is definitely linearized).
     //
     // Keep in mind that the array of posts is an array of comments; the replies are still part of this structure
     // only due to the post.replies substructure.
-    posts.forEach(function(post) {
+    posts_sorted.forEach(function(post) {
+      console.log("FINAL ORDER:");
+      console.log(post);
       let content;
       dataIndex += 1;
       var attrs = calcAttrs(post);
