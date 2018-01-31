@@ -30,8 +30,11 @@ export default class UserRosterDropdown extends Dropdown {
     const user = app.session.user;
     const suffix = (this.props.userList.length==1 ? ' member' : ' members');
     return [
-      <span className="Button-label">{String(this.props.userList.length) + suffix}</span>,
-      icon('sort', {className: 'Button-caret'})
+      <span className="Button-label">
+         {icon('user')}&thinsp;
+         {icon('user')}&thinsp;
+         {icon('user')}
+      </span>
     ];
   }
 
