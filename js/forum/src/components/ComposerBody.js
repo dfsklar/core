@@ -37,6 +37,22 @@ export default class ComposerBody extends Component {
      */
     this.content = m.prop(this.props.originalContent);
 
+    // DFSKLARD here is where I plan to regexp the fact that this is a reply and hide the "coding".
+    // Unfortunately, it is the function *insertMention* in the mention extension that does this work, which
+    // is why the core GUI knows nothing about this!
+    /*
+    const regex_identify_reply = new RegExp(/^\@.*?\#(\d+)/);
+    if (this.content.startsWith('@')) {
+      const match = content.match(regex_identify_reply);
+      if (match) {
+        this.starterCode = match;
+        this.content = this.content.substr(this.starterCode.length);
+      }
+    }*/
+
+
+
+
     /**
      * The text editor component instance.
      *
