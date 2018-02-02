@@ -118,6 +118,8 @@ export default class ComposerBody extends Component {
    * @abstract
    */
   onsubmit() {
+    // DFSKLARD: onsubmit for the composer body.  Hoping to retrieve the mention object here.
+    var debugme342 = true;
   }
 
   /**
