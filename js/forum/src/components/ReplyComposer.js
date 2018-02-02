@@ -79,11 +79,11 @@ export default class ReplyComposer extends ComposerBody {
     this.loading = true;
     m.redraw();
 
-    var data = this.data();
+    const data = this.data();
 
     // DFSKLARD: Hoping it's not too late to change the data to have the mention annotation inside it.
     if (this.props.mentionAnnotation) {
-      data = this.props.mentionAnnotation + ' ' + data;
+      data.content = this.props.mentionAnnotation + ' ' + data.content;
     }
 
     app.store.createRecord('posts').save(data).then(
