@@ -30,27 +30,24 @@ export default class ComposerBody extends Component {
      */
     this.loading = false;
 
-    /**
-     * The content of the text editor.
-     *
-     * @type {Function}
-     */
-    this.content = m.prop(this.props.originalContent);
 
-    // DFSKLARD here is where I plan to regexp the fact that this is a reply and hide the "coding".
-    // Unfortunately, it is the function *insertMention* in the mention extension that does this work, which
-    // is why the core GUI knows nothing about this!
-    /*
-    const regex_identify_reply = new RegExp(/^\@.*?\#(\d+)/);
-    if (this.content.startsWith('@')) {
-      const match = content.match(regex_identify_reply);
-      if (match) {
-        this.starterCode = match;
-        this.content = this.content.substr(this.starterCode.length);
+    // DFSKLARD here is where I plan to regexp the fact that this is an existing reply and hide the "coding".
+    // This code is not really executed for a *NEW* reply -- for such an animal, the content here is still blank
+    // because the insertMention has not yet been done yet (see the "mention" package extension).
+    if (this.props.originalContent) {
+      const regex_identify_reply = new RegExp(/^\@.*?\#(\d+) +/);
+      if (this.props.originalContent.startsWith('@')) {
+        const match = this.props.originalContent.match(regex_identify_reply);
+        if (match) {
+          this.props.mentionAnnotation = match[0];
+          this.content = m.prop(this.props.originalContent.substr(match[0].length));
+        }
       }
-    }*/
+    }
 
-
+    if (!(this.content)) {
+      this.content = m.prop(this.props.originalContent);
+    }
 
 
     /**
@@ -118,8 +115,9 @@ export default class ComposerBody extends Component {
    * @abstract
    */
   onsubmit() {
-    // DFSKLARD: onsubmit for the composer body.  Hoping to retrieve the mention object here.
-    var debugme342 = true;
+    var debug234552 = true;
+    debugger;
+    var jfieow = 3 / debug234552;
   }
 
   /**

@@ -162,6 +162,8 @@ export default class TextEditor extends Component {
    * Handle the submit button being clicked.
    */
   onsubmit() {
+    debugger;
+    var dfsklard607pm = true;
     this.props.onsubmit(this.value());
   }
 }

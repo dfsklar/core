@@ -75,6 +75,11 @@ export default class EditPostComposer extends ComposerBody {
 
     const data = this.data();
 
+    // DFSKLARD: Restore any "reply mention code" annotation.
+    if (this.props.mentionAnnotation) {
+      data.content = this.props.mentionAnnotation + data.content;
+    }
+
     this.props.post.save(data).then(
       () => app.composer.hide(),
       this.loaded.bind(this)
