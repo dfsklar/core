@@ -1,6 +1,15 @@
 <!doctype html>
 <html dir="{{ $direction }}" lang="{{ $language }}">
   <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105369895-3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-105369895-3');
+    </script>
     <meta charset="utf-8">
     <title>{{ $title }}</title>
     <meta name="description" content="{{ $description }}">
