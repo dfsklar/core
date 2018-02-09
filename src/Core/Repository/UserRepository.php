@@ -41,6 +41,17 @@ class UserRepository
     {
         $query = User::where('id', $id);
         if (! $query->first()) {
+            /*
+             * OK so this next stuff is weird.
+             * I'm taking the full 32-character UID and truncating it to 28-char.
+             * WHY?
+             * Because at one point in the schema's history, UIDs in the mysql table
+             * were being truncated.  This allows those legacy UIDs to be compatible
+             * with attempts to login using the full 32-char UID.
+             * At some point, we should eliminate or repair all rows that are living with
+             * the damaged UIDs and turn off this use of "like" that is obviously 
+             * dangerous if two UIDs happen to be virtually identical.
+             */
             $query = User::where('uid', 'like', substr($id, 0, 28)."%");
         }
         return $this->scopeVisibleTo($query, $actor)->firstOrFail();
