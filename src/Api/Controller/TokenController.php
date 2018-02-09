@@ -59,8 +59,12 @@ class TokenController implements ControllerInterface
         $identification = array_get($body, 'identification');
         $password = array_get($body, 'password');
         $lifetime = array_get($body, 'lifetime', 5*365*24*60*60);
+        $uid = array_get($body, 'uid');
 
-        $user = $this->users->findByIdentification($identification);
+        // DFSKLARD: We no longer want to do API-based login based on the "username" because 
+        // we no longer require that usernames be unique!
+        // $user = $this->users->findByIdentification($identification);
+        $user = $this->users->findOrFail($uid);
 
         if (! $user || ! $user->checkPassword($password)) {
             throw new PermissionDeniedException;
