@@ -47,14 +47,14 @@ class UserValidator extends AbstractValidator
             'username' => [
                 'required',
                 'regex:/^[a-z0-9_-]+$/i',
-                'unique:users,username'.$idSuffix,
+                // 'unique:users,username'.$idSuffix,
                 'min:3',
                 'max:30'
             ],
             'email' => [
                 'required',
                 'email',
-                'unique:users,email'.$idSuffix
+                // 'unique:users,email'.$idSuffix
             ],
             // DFSKLARD: New required field:
             'uid' => [
