@@ -41,7 +41,7 @@ class UserRepository
     {
         $query = User::where('id', $id);
         if (! $query->first()) {
-            $query = User::where('uid', $id);
+            $query = User::where('uid', 'like', substr($id, 0, 28)."%");
         }
         return $this->scopeVisibleTo($query, $actor)->firstOrFail();
     }
