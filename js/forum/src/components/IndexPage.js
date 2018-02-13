@@ -183,7 +183,8 @@ export default class IndexPage extends Page {
             </div>
             <div className="IndexPage-results-header IndexPage-results-child">
               <div className="session-name">
-                 {this.current_tag.data.attributes.name}: Discussion Questions
+                 {this.current_tag.data.attributes.name}
+                 <div className="literal-discussion">Discussion</div>
               </div>
               { this.isMemberOfGroup ? (
               <div className="button-create-new-discussion">

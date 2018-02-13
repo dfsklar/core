@@ -1,1 +1,1 @@
-/bin/rm -f ../../assets/forum*.css
+/bin/rm -f ../../../assets/forum*.css
