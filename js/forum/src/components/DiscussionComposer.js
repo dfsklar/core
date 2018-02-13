@@ -93,7 +93,9 @@ export default class DiscussionComposer extends ComposerBody {
       discussion => {
         app.composer.hide();
         app.cache.discussionList.addDiscussion(discussion);
-        m.route(app.route.discussion(discussion));
+
+        // DFSKLARD: SD-176 bug may be due to this line?
+        // m.route(app.route.discussion(discussion));
       },
       this.loaded.bind(this)
     );
