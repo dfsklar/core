@@ -22,9 +22,6 @@ import SiteSpecifics from 'flarum/SITESPECIFICS';
 export default class IndexPage extends Page {
 
 
-
-
-
   refreshGroupMembershipInfo() {
     // So now you want to obtain the USER object for the currently logged-in user.
     // In that user object you'll find:
@@ -34,14 +31,16 @@ export default class IndexPage extends Page {
     this.loading = false;
     this.loggedinUserMembershipList = app.session.user.data.relationships.groups.data;
     this.isMemberOfGroup = this.loggedinUserMembershipList.some(group => (group.id == this.matchingGroup.data.id));
+    console.log("IndexPage: refreshGroupMembershipInfo(): " + String(this.isMemberOfGroup));
     m.redraw();
   }
 
 
-
-
   init() {
+    console.log("IndexPage: init(): " + String(this.isMemberOfGroup));
     super.init();
+
+    this.isMemberOfGroup = false;
 
     // If the user is returning from a discussion page, then take note of which
     // discussion they have just visited. After the view is rendered, we will
@@ -61,6 +60,8 @@ export default class IndexPage extends Page {
     const params = this.params();
 
 
+    var leave_early = true;
+
     // DFSKLARD: experiment with catching a situation requiring re-routing early.
     // If this is a display of a GROUP (i.e. top-level tag), reroute to
     // one of its SESSIONS (secondary-level tag).
@@ -68,11 +69,13 @@ export default class IndexPage extends Page {
       // If no tags at all, the user hasn't even chosen a GROUP to dive into.
       // We are thus going to lead them to the list of groups!
       m.route(app.route('tags'));
+      console.log("init() calling m.route to redirect 001");
       return;
     }
     else {
       this.current_tag = app.store.getBy('tags', 'slug', params.tags);
       if (this.current_tag) {
+        leave_early = false;
         if ( ! (this.current_tag.data.attributes.isChild)) {
           // SO: we have a situation where we want to reroute to the "latest-added"
           // subchild of this tag.
@@ -83,14 +86,22 @@ export default class IndexPage extends Page {
             if (children.length > 0) {
               const latest_child = children[children.length-1];
               const target = app.route.tag(latest_child);
-              m.route(target);
-              return;
+              m.route(target, null, {replace: true});
+              console.log("init() calling m.route to redirect 002");
+              this.current_tag = latest_child;
+              /* 
+              !!!!!!! MAJOR BUG IN MITHRIL:  the "this" at this moment is the "this"
+              that will be used by the view() method, but the route will spawn a separate "this"
+              that will be sent to the next call to init().*/
+              // this.isMemberOfGroup = true; /// JUST AN EXPERIMENTY
             }
           }
         }
       }
     }
 
+    if (leave_early) 
+      return;
 
     // Obtain full info about the group that is associated with this primary tag.
     this.associatedGroupSLUG = this.current_tag.parent().slug();
@@ -98,6 +109,8 @@ export default class IndexPage extends Page {
     let associatedGroupID = this.matchingGroup.id();
 
 
+    console.log("init(): about to actually invoke the async call to refresh group membership.");
+    this.sklar = true;
     app.store.find('groups', associatedGroupID)
       .then(this.handleGroupDetails.bind(this));
 
@@ -165,6 +178,7 @@ export default class IndexPage extends Page {
   }
 
   view() {
+    console.log("IndexPage: view() " + String(this.isMemberOfGroup));
     const canStartDiscussion = app.forum.attribute('canStartDiscussion') || !app.session.user;
     return (
     <div className="IndexPage-Supercontainer">
@@ -199,11 +213,12 @@ export default class IndexPage extends Page {
               }
             </div>
           </div>
+          { app.cache.discussionList ? (
           <div className="IndexPage-results-body">
             <div className="IndexPage-results-child">
               {app.cache.discussionList.render()}
             </div>
-          </div>
+          </div> ) : '' }
         </div>
       </div>
     </div>
