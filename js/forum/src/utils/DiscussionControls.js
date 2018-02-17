@@ -8,6 +8,8 @@ import Separator from 'flarum/components/Separator';
 import RenameDiscussionModal from 'flarum/components/RenameDiscussionModal';
 import ItemList from 'flarum/utils/ItemList';
 import extractText from 'flarum/utils/extractText';
+import EditPostComposer from 'flarum/components/EditPostComposer';
+
 
 /**
  * The `DiscussionControls` utility constructs a list of buttons for a
@@ -99,16 +101,6 @@ export default {
    */
   moderationControls(discussion) {
     const items = new ItemList();
-
-    // DFSKLARD: renaming is not part of Formed.org culture
-    if (false && discussion.canRename()) {
-      items.add('rename', Button.component({
-        icon: 'pencil',
-        children: app.translator.trans('core.forum.discussion_controls.rename_button'),
-        onclick: this.renameAction.bind(discussion)
-      }));
-    }
-
     return items;
   },
 
@@ -128,6 +120,11 @@ export default {
 
     if (!discussion.isHidden()) {
       if (discussion.canHide()) {
+        items.add('edit', Button.component({
+          icon: 'pencil',
+          children: [ 'Edit' ],
+          onclick: this.editFirstPostAction.bind(discussion)
+        }));
         items.add('hide', Button.component({
           icon: 'trash-o',
           children: app.translator.trans('core.forum.discussion_controls.delete_button'),
@@ -197,6 +194,23 @@ export default {
     return deferred.promise;
   },
 
+
+
+
+  /**
+   * Edit the very first post of the discussion.
+   */
+  editFirstPostAction() {
+    // "this" IS THE DISCUSSION OBJECT.is.data.relationships.startPost.data.id
+    const IDstartingpost = this.data.relationships.startPost.data.id;
+    const post = app.store.getById('posts', IDstartingpost);
+    app.composer.load(new EditPostComposer({ post: post }));
+    app.composer.show();
+  },
+
+
+
+
   /**
    * Hide a discussion.
    *
@@ -241,6 +255,10 @@ export default {
       });
     }
   },
+
+
+
+
 
   /**
    * Rename the discussion.
