@@ -35,6 +35,11 @@ export default class IndexPage extends Page {
     m.redraw();
   }
 
+  // This is for use by other parts of the UI, to communicate just-performed modifications in membership.
+  assertMembership(bool) {
+    this.isMemberOfGroup = bool;
+  }
+
 
   init() {
     console.log("IndexPage: init(): " + String(this.isMemberOfGroup));
