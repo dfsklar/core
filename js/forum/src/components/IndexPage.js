@@ -20,6 +20,26 @@ import SiteSpecifics from 'flarum/SITESPECIFICS';
  * hero, the sidebar, and the discussion list.
  */
 export default class IndexPage extends Page {
+
+
+
+
+
+  refreshGroupMembershipInfo() {
+    // So now you want to obtain the USER object for the currently logged-in user.
+    // In that user object you'll find:
+    //   data.relationships.groups.data which is an array.
+    //     Each record in that array has a "id" object, string repr of a number.
+    // The current user's ID is in:  app.data.session.userId
+    this.loading = false;
+    this.loggedinUserMembershipList = app.session.user.data.relationships.groups.data;
+    this.isMemberOfGroup = this.loggedinUserMembershipList.some(group => (group.id == this.matchingGroup.data.id));
+    m.redraw();
+  }
+
+
+
+
   init() {
     super.init();
 
@@ -74,10 +94,16 @@ export default class IndexPage extends Page {
 
     // Obtain full info about the group that is associated with this primary tag.
     this.associatedGroupSLUG = this.current_tag.parent().slug();
-    let associatedGroupID = app.store.getBy('groups','slug', this.associatedGroupSLUG).id();
-    app.store.find('groups', associatedGroupID)
-    .then(this.handleGroupDetails.bind(this));
+    this.matchingGroup = app.store.getBy('groups','slug', this.associatedGroupSLUG);
+    let associatedGroupID = this.matchingGroup.id();
 
+
+    app.store.find('groups', associatedGroupID)
+      .then(this.handleGroupDetails.bind(this));
+
+
+    app.store.find('users', app.session.user.id())
+      .then(this.refreshGroupMembershipInfo.bind(this));
 
 
     if (app.cache.discussionList) {
@@ -110,6 +136,15 @@ export default class IndexPage extends Page {
 
     this.bodyClass = 'App--index';
   }
+
+
+  recordGroupRoster(r) {
+    this.groupMembershipRoster = r.data.relationships.users.data;
+    m.redraw();
+  }
+
+
+
 
 
   handleGroupDetails(group) {
@@ -148,17 +183,20 @@ export default class IndexPage extends Page {
             </div>
             <div className="IndexPage-results-header IndexPage-results-child">
               <div className="session-name">
-                 {this.current_tag.data.attributes.name}: Discussion Questions
+                 {this.current_tag.data.attributes.name}
+                 <div className="literal-discussion">Discussion</div>
               </div>
-              <div className="button-create-new-discussion">
-              {Button.component({
-                children:  [ <span>NEW POST</span> ],
-                icon: 'edit',
-                className: 'Button Button--primary IndexPage-newDiscussion',
-                itemClassName: 'App-primaryControl',
-                onclick: this.newDiscussion.bind(this),
-                disabled: !canStartDiscussion
-              })}</div>
+              { this.isMemberOfGroup ? (
+                <div className="button-create-new-discussion">
+                {Button.component({
+                  children:  [ <span>NEW POST</span> ],
+                  icon: 'edit',
+                  className: 'Button Button--primary IndexPage-newDiscussion',
+                  itemClassName: 'App-primaryControl',
+                  onclick: this.newDiscussion.bind(this),
+                  disabled: !canStartDiscussion
+                })}</div> ) : '' 
+              }
             </div>
           </div>
           <div className="IndexPage-results-body">
