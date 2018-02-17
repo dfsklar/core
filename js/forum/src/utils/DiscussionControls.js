@@ -101,16 +101,6 @@ export default {
    */
   moderationControls(discussion) {
     const items = new ItemList();
-
-    // DFSKLARD: renaming is not part of Formed.org culture
-    if (false && discussion.canRename()) {
-      items.add('rename', Button.component({
-        icon: 'pencil',
-        children: app.translator.trans('core.forum.discussion_controls.rename_button'),
-        onclick: this.renameAction.bind(discussion)
-      }));
-    }
-
     return items;
   },
 

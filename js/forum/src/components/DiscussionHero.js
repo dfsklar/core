@@ -134,10 +134,6 @@ export default class DiscussionHero extends Component {
         alert("FATAL ERROR:  Please report error 877421 to Formed.org personnel.");
       }
 
-      if (editButton.length) {
-        items.add('post-control-edit', editButton[0]);
-      }
-
       // DFSKLARD: m.trust allows you to ask mithril to take the raw html and not try to protect it
       items.add('startingpost', 
         <div className="DiscussionHero-StartingPost">
