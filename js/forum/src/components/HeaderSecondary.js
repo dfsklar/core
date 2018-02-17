@@ -17,9 +17,13 @@ import username from 'flarum/helpers/username';
 export default class HeaderSecondary extends Component {
   view() {
     return (
+      <div className="hsec-holder">
+      <div className="nav-up">
+      </div>
       <ul className="Header-controls">
         {listItems(this.items().toArray())}
       </ul>
+      </div>
     );
   }
 
