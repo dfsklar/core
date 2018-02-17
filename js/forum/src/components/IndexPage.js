@@ -187,15 +187,16 @@ export default class IndexPage extends Page {
                  <div className="literal-discussion">Discussion</div>
               </div>
               { this.isMemberOfGroup ? (
-              <div className="button-create-new-discussion">
-              {Button.component({
-                children:  [ <span>NEW POST</span> ],
-                icon: 'edit',
-                className: 'Button Button--primary IndexPage-newDiscussion',
-                itemClassName: 'App-primaryControl',
-                onclick: this.newDiscussion.bind(this),
-                disabled: !canStartDiscussion
-              })}</div> ) : '' }
+                <div className="button-create-new-discussion">
+                {Button.component({
+                  children:  [ <span>NEW POST</span> ],
+                  icon: 'edit',
+                  className: 'Button Button--primary IndexPage-newDiscussion',
+                  itemClassName: 'App-primaryControl',
+                  onclick: this.newDiscussion.bind(this),
+                  disabled: !canStartDiscussion
+                })}</div> ) : '' 
+              }
             </div>
           </div>
           <div className="IndexPage-results-body">

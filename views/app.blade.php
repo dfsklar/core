@@ -10,6 +10,7 @@
 
       gtag('config', 'UA-105369895-3');
     </script>
+    <script src="https://use.typekit.net/hhx1otp.js"></script>
     <meta charset="utf-8">
     <title>{{ $title }}</title>
     <meta name="description" content="{{ $description }}">
