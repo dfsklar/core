@@ -1,5 +1,8 @@
 export default class SiteSpecifics {
    fetchFormedURL() {
-      return "https://formed.org/";
+      if (window.flarum_autologin_referer)
+        return window.flarum_autologin_referer;
+      else
+        return "https://formed.org/";
    }
 }

@@ -241,10 +241,12 @@ export default class IndexPage extends Page {
     app.setTitleCount(0);
 
     // DFSKLARD: Create a button for returning to formed.org parish homepage
+    // RETIRED: 
+    /*
     const $destination = $('#header-navigation');
-    const destURL = app.siteSpecifics.fetchFormedURL() + "/home?linkId=custom-content";
+    const destURL = app.siteSpecifics.fetchFormedURL();
     $destination.empty();
-    $destination.append('<a href="' + destURL + '" class=returntoformed>&lt; RETURN TO COMMUNITY</a>');
+    $destination.append('<a href="' + destURL + '" class=returntoformed>&lt; RETURN TO COMMUNITY</a>');*/
 
     // Work out the difference between the height of this hero and that of the
     // previous hero. Maintain the same scroll position relative to the bottom

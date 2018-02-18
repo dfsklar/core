@@ -294,6 +294,8 @@ class WebAppView
         $view->language = $this->language ?: $this->locales->getLocale();
         $view->direction = $this->direction ?: 'ltr';
 
+        $view->referer = array_get($request->getCookieParams(), 'flarum_autologin_referer');
+
         $view->modules = $this->modules;
         $view->payload = $this->buildPayload($request, $forum);
 
