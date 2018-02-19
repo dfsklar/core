@@ -7,6 +7,8 @@ import LoadingIndicator from 'flarum/components/LoadingIndicator';
 import SplitDropdown from 'flarum/components/SplitDropdown';
 import listItems from 'flarum/helpers/listItems';
 import DiscussionControls from 'flarum/utils/DiscussionControls';
+import tagLabel from 'flarum/tags/helpers/tagLabel';
+
 
 /**
  * The `DiscussionPage` component displays a whole discussion page, including
@@ -87,6 +89,24 @@ export default class DiscussionPage extends Page {
 
 
 
+
+  setUpNavlinkUpToSession(discussion) {
+    const tags = discussion.data.relationships.tags;
+
+    tags.data.forEach(tagptr => {
+      if (tagptr || tags.length === 1) {
+        // DFSKLARD: We only want emission for the primary tag (repr the group as a whole).
+        const tag = discussion.store.data.tags[tagptr.id];
+        if (tag.data.attributes.isChild === true) {
+          $('.nav-up').empty().append(
+            $('<a href="/t/' + tag.data.attributes.slug + '">&lt; Back to group</a>')
+          );
+        }
+      }
+    });
+  }
+
+
   /* 
   DFSKLARD: Note that this view() method is only returning the content to be placed in
   the outer framework's <DIV id='content'> element.
@@ -94,6 +114,9 @@ export default class DiscussionPage extends Page {
 
   view() {
     const discussion = this.discussion;
+
+    if (discussion)
+      this.setUpNavlinkUpToSession(discussion);
 
     return (
     <div className="DiscussionPage-Supercontainer">
