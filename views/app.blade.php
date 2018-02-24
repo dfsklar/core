@@ -25,6 +25,9 @@
     <script src="https://use.typekit.net/hhx1otp.js"></script>
     <script>try{Typekit.load({ async: true });}catch(e){}</script>
 
+    <!-- Mithril-0.2.x-based drag&drop -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/dragula/3.1.0/dragula.min.js"></script>
+  
     <meta charset="utf-8">
     <title>{{ $title }}</title>
     <meta name="description" content="{{ $description }}">
