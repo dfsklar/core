@@ -67,6 +67,9 @@ export default class IndexPage extends Page {
 
     var leave_early = true;
 
+    const reduceToMax = (acc, cur) => 
+      { return ((acc.position() > cur.position())) ? acc : cur; }
+
     // DFSKLARD: experiment with catching a situation requiring re-routing early.
     // If this is a display of a GROUP (i.e. top-level tag), reroute to
     // one of its SESSIONS (secondary-level tag).
@@ -89,7 +92,9 @@ export default class IndexPage extends Page {
           // 
           if (children) {
             if (children.length > 0) {
-              const latest_child = children[children.length-1];
+              // Finding the latest child means finding the one with the maximum "position".
+              const last_child = children[children.length-1];  // Not vetted by position yet
+              const latest_child = children.reduce(reduceToMax, last_child);   // Now this is truly by position
               const target = app.route.tag(latest_child);
               m.route(target, null, {replace: true});
               console.log("init() calling m.route to redirect 002");
