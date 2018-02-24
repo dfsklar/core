@@ -32,6 +32,11 @@ export default class IndexPage extends Page {
     this.loggedinUserMembershipList = app.session.user.data.relationships.groups.data;
     this.isMemberOfGroup = this.loggedinUserMembershipList.some(group => (group.id == this.matchingGroup.data.id));
     console.log("IndexPage: refreshGroupMembershipInfo(): " + String(this.isMemberOfGroup));
+
+    // Am "I" the leader of this group?
+		const groupLeaderUserID = this.tag_representing_group.data.attributes.leaderUserId;
+		this.yesIAmTheLeaderOfThisGroup = (String(groupLeaderUserID) == String(app.session.user.data.id));
+
     m.redraw();
   }
 
@@ -88,6 +93,7 @@ export default class IndexPage extends Page {
           // SO: we have a situation where we want to reroute to the "latest-added"
           // subchild of this tag.
           // How to find subtags?
+          this.tag_representing_group = this.current_tag;
           const children = app.store.all('tags').filter(child => child.parent() === this.current_tag);          
           // 
           if (children) {
@@ -105,6 +111,8 @@ export default class IndexPage extends Page {
               that will be sent to the next call to init().*/
               // this.isMemberOfGroup = true; /// JUST AN EXPERIMENTY
             }
+          } else {
+            alert("This discussion group (ID=" + this.current_tag.data.id + ") has a damaged database (zero sessions).  Please contact Formed.org staff.")
           }
         }
       }
@@ -113,11 +121,14 @@ export default class IndexPage extends Page {
     if (leave_early) 
       return;
 
+    if (!(this.tag_representing_group)) {
+      this.tag_representing_group = this.current_tag.parent();
+    }
+
     // Obtain full info about the group that is associated with this primary tag.
-    this.associatedGroupSLUG = this.current_tag.parent().slug();
+    this.associatedGroupSLUG = this.tag_representing_group.slug();
     this.matchingGroup = app.store.getBy('groups','slug', this.associatedGroupSLUG);
     let associatedGroupID = this.matchingGroup.id();
-
 
     console.log("init(): about to actually invoke the async call to refresh group membership.");
     this.sklar = true;
@@ -211,7 +222,7 @@ export default class IndexPage extends Page {
                  {this.current_tag.data.attributes.name}
                  <div className="literal-discussion">Discussion</div>
               </div>
-              { this.isMemberOfGroup ? (
+              { this.yesIAmTheLeaderOfThisGroup ? (
                 <div className="button-create-new-discussion">
                 {Button.component({
                   children:  [ <span>NEW POST</span> ],
