@@ -49,13 +49,26 @@ class GroupSerializer extends AbstractSerializer
             );
         }
 
-        return [
+        $attributes = 
+        [
             'nameSingular' => $this->translateGroupName($group->name_singular),
             'namePlural'   => $this->translateGroupName($group->name_plural),
             'color'        => $group->color,
             'icon'         => $group->icon,
             'slug'         => $group->slug
         ];
+
+        // DFSKLARD added this more sophisticated user-to-group relationship
+
+        Group::setStateUser($this->actor);
+
+        if ($state = $group->state) {
+            $attributes += [
+                'status'   => $state->status
+            ];
+        }
+
+        return $attributes;
     }
 
 

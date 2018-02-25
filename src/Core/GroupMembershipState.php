@@ -27,7 +27,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property Group $group
  * @property \Flarum\Core\User $user
  */
-class DiscussionState extends AbstractModel
+class GroupMembershipState extends AbstractModel
 {
     use EventGeneratorTrait;
 
