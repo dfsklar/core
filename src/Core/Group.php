@@ -25,6 +25,7 @@ use Flarum\Event\GroupWasRenamed;
  * @property string|null $color
  * @property string|null $icon
  * @property int|null $start_user_id
+ * @property GroupMembershipState|null $state
  * @property \Illuminate\Database\Eloquent\Collection $users
  * @property \Illuminate\Database\Eloquent\Collection $permissions
  */
@@ -57,6 +58,13 @@ class Group extends AbstractModel
      * The ID of the mod group.
      */
     const MODERATOR_ID = 4;
+
+    /**
+     * The user for which the state relationship should be loaded.
+     *
+     * @var User
+     */
+    protected static $stateUser;
 
     /**
      * Boot the model.
@@ -143,6 +151,59 @@ class Group extends AbstractModel
             ->select('users.*')
             ->distinct();
     }
+
+
+    /**
+     * Define the relationship with the group's state for a particular
+     * user.
+     *
+     * If no user is passed (i.e. in the case of eager loading the 'state'
+     * relation), then the static `$stateUser` property is used.
+     *
+     * @see Group::setStateUser()
+     *
+     * @param User|null $user
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function state(User $user = null)
+    {
+        $user = $user ?: static::$stateUser;
+
+        return $this->hasOne('Flarum\Core\GroupMembershipState')->where('user_id', $user ? $user->id : null);
+    }
+
+
+    /**
+     * Get the state model for a user, or instantiate a new one if it does not
+     * exist.
+     *
+     * @param User $user
+     * @return \Flarum\Core\DiscussionState
+     */
+    public function stateFor(User $user)
+    {
+        $state = $this->state($user)->first();
+
+        if (! $state) {
+            $state = new GroupMembershipState;
+            $state->group_id = $this->id;
+            $state->user_id = $user->id;
+        }
+
+        return $state;
+    }
+
+
+    /**
+     * Set the user for which the state relationship should be loaded.
+     *
+     * @param User $user
+     */
+    public static function setStateUser(User $user)
+    {
+        static::$stateUser = $user;
+    }
+
 
     /**
      * Define the relationship with the group's users.
