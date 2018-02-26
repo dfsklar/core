@@ -178,7 +178,7 @@ class Group extends AbstractModel
      * exist.
      *
      * @param User $user
-     * @return \Flarum\Core\DiscussionState
+     * @return \Flarum\Core\GroupMembershipState
      */
     public function stateFor(User $user)
     {

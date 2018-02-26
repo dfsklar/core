@@ -47,7 +47,7 @@ class PostSerializer extends PostBasicSerializer
 
 	    // DFSKLARD always wants the content to be available so we can show "post teasers".
             //if ($canEdit || true) {
-                $attributes['content'] = $post->content;
+            $attributes['content'] = $post->content;
             //}
             if ($gate->allows('viewIps', $post)) {
                 $attributes['ipAddress'] = $post->ip_address;
