@@ -626,6 +626,16 @@ class User extends AbstractModel
     }
 
     /**
+     * Define the relationship with the user's groups.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function grouprequests()
+    {
+        return $this->belongsToMany('Flarum\Core\Group', 'users_grouprequests');
+    }
+
+    /**
      * Define the relationship with the user's notifications.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

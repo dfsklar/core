@@ -42,6 +42,11 @@ class EditUserHandler
     protected $groups;
 
     /**
+     * @var UserRepository
+     */
+    protected $grouprequests;
+
+    /**
      * @var UserValidator
      */
     protected $validator;
@@ -60,15 +65,20 @@ class EditUserHandler
      * @param Dispatcher $events
      * @param UserRepository $users
      * @param GroupRepository $groups
+     * @param GroupRepository $grouprequests
      * @param UserValidator $validator
      * @param AvatarUploader $avatarUploader
      * @param Factory $validatorFactory
      */
-    public function __construct(Dispatcher $events, UserRepository $users, UserValidator $validator, AvatarUploader $avatarUploader, Factory $validatorFactory, GroupRepository $groups)
+    public function __construct(Dispatcher $events, UserRepository $users, UserValidator $validator, AvatarUploader $avatarUploader, Factory $validatorFactory,
+        GroupRepository $groups,
+        GroupRepository $grouprequests
+    )
     {
         $this->events = $events;
         $this->users = $users;
         $this->groups = $groups;
+        $this->grouprequests = $grouprequests;
         $this->validator = $validator;
         $this->avatarUploader = $avatarUploader;
         $this->validatorFactory = $validatorFactory;
@@ -137,6 +147,11 @@ class EditUserHandler
             }
         }
 
+
+
+        // ****************
+        // GROUP MEMBERSHIP (solid membership, i.e. not pending)
+
         // DFSKLARD: This is where a user's set of groups-to-which-she-belongs changes.
         if (isset($relationships['groups']['data']) && is_array($relationships['groups']['data'])) {
             $this->assertPermission($canEdit);
@@ -180,7 +195,72 @@ class EditUserHandler
             $user->afterSave(function (User $user) use ($newGroupIds) {
                 $user->groups()->sync($newGroupIds);
             });
+
         }
+
+
+
+
+        // ****************
+        // GROUP "WANNABE" (requested membership, still pending)
+
+        if (isset($relationships['grouprequests']['data']) && is_array($relationships['grouprequests']['data'])) {
+            $this->assertPermission($canEdit);
+
+            // We are going to create an array of INTs which specifies the revised complete set of group IDs for this user.
+            // Warning: this variable is poorly named.  It is NOT a list of the *new* groups for this user!
+            // It is the *new* complete list of groups for this user and thus can cause groups to be dropped from this user's set of groups.
+            $newGroupIds = [];
+            foreach ($relationships['grouprequests']['data'] as $group) {
+                if ($id = array_get($group, 'id')) {
+                    // DFSKLARD: I added support for allowing the ID to be specified by slug, so I always
+                    // have to "validate" the given ID via a findOrFail, since findOrFail accepts slugs as lookup keys.
+                    $actualGroupObject = $this->groups->findOrFail($id);
+                    if ($actualGroupObject)
+                        $newGroupIds[] = strval($actualGroupObject['attributes']['id']);
+                }
+            }
+
+            // DFSKLARD: I added mode="add":
+            if (isset($relationships['mode'])) {
+                if ($relationships['mode'] == "add") {
+                    // The caller only wants to ADD one or more new groups to this user's set of groups.
+                    // So we visit the user's current list of groups and make sure they are all added to $newGroupIds.
+                    foreach ($user->grouprequests()->get()->all() as $currentGroup) {
+                        $gid = strval($currentGroup['attributes']['id']);
+                        if ( ! in_array($gid, $newGroupIds)) {
+                            $newGroupIds[] = $gid;
+                            $relationships['grouprequests']['data'][] = Array(
+                               "type" => "groups",
+                               "id" => $gid);
+                        }
+                    }
+                    $data['relationships'] = $relationships;
+                }
+            }
+
+            $user->raise(
+                new UserGroupsWereChanged($user, $user->grouprequests()->get()->all())
+            );
+
+            $user->afterSave(function (User $user) use ($newGroupIds) {
+                $user->grouprequests()->sync($newGroupIds);
+            });
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         if ($avatarUrl = array_get($attributes, 'avatarUrl')) {
             $validation = $this->validatorFactory->make(compact('avatarUrl'), ['avatarUrl' => 'url']);

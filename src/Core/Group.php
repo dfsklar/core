@@ -26,6 +26,7 @@ use Flarum\Event\GroupWasRenamed;
  * @property string|null $icon
  * @property int|null $start_user_id
  * @property \Illuminate\Database\Eloquent\Collection $users
+ * @property \Illuminate\Database\Eloquent\Collection $wannabeusers
  * @property \Illuminate\Database\Eloquent\Collection $permissions
  */
 class Group extends AbstractModel
@@ -152,6 +153,16 @@ class Group extends AbstractModel
     public function users()
     {
         return $this->belongsToMany('Flarum\Core\User', 'users_groups');
+    }
+
+    /**
+     * Define the relationship with the group's "wannabe" users.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function wannabeusers()
+    {
+        return $this->belongsToMany('Flarum\Core\User', 'users_grouprequests');
     }
 
     /**

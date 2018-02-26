@@ -18,6 +18,7 @@ Object.assign(User.prototype, {
   avatarUrl: Model.attribute('avatarUrl'),
   preferences: Model.attribute('preferences'),
   groups: Model.hasMany('groups'),
+  grouprequests: Model.hasMany('grouprequests'),
 
   joinTime: Model.attribute('joinTime', Model.transformDate),
   lastSeenTime: Model.attribute('lastSeenTime', Model.transformDate),

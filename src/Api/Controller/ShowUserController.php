@@ -25,7 +25,7 @@ class ShowUserController extends AbstractResourceController
     /**
      * {@inheritdoc}
      */
-    public $include = ['groups'];
+    public $include = ['groups', 'grouprequests'];
 
     /**
      * @var UserRepository
