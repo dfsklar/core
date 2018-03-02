@@ -35,7 +35,11 @@ export default class IndexPage extends Page {
 
     // Am "I" the leader of this group?
 		const groupLeaderUserID = this.tag_representing_group.data.attributes.leaderUserId;
-		this.yesIAmTheLeaderOfThisGroup = (String(groupLeaderUserID) == String(app.session.user.data.id));
+    this.yesIAmTheLeaderOfThisGroup = (String(groupLeaderUserID) == String(app.session.user.data.id));
+    
+    if (this.yesIAmTheLeaderOfThisGroup && ( ! this.isMemberOfGroup )) {
+      alert("Error: you are the leader of this group, but your membership record has been lost.  Please report to formed.org staff.  You may not be able to fully participate in or manage this group.");
+    }
 
     m.redraw();
   }
