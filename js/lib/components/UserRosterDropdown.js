@@ -45,14 +45,16 @@ export default class UserRosterDropdown extends Dropdown {
    */
   items() {
     const items = new ItemList();
-
-    this.props.userList.forEach(function(val){
+    var idLeader = this.props.userList[0].id;
+    this.props.userList.forEach(function(val, idx){
       const userinfo = app.store.getById('users',val.id);
+      const isLeader = (val.id == idLeader);
       items.add(val.id,
         Button.component({
-          children: [ userinfo.data.attributes.username ]
-       }),
-       -100
+          children: [ userinfo.data.attributes.username ],
+          className: 'Button user-roster' + (isLeader ? ' user-roster-leader' : '')
+        }),
+        isLeader ? 5 : -100
     );
     });
 
