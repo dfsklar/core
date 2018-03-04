@@ -77,7 +77,17 @@ export default class IndexPage extends Page {
     var leave_early = true;
 
     const reduceToMax = (acc, cur) => 
-      { return ((acc.position() > cur.position())) ? acc : cur; }
+      { 
+        if (cur.position() == 0) {
+          return cur;
+        } else {
+          if (cur.data.attributes.isHidden) {
+            return acc;
+          } else {
+            return ((acc.position() > cur.position())) ? acc : cur; 
+          }
+        }
+      }
 
     // DFSKLARD: experiment with catching a situation requiring re-routing early.
     // If this is a display of a GROUP (i.e. top-level tag), reroute to
@@ -102,7 +112,7 @@ export default class IndexPage extends Page {
           // 
           if (children) {
             if (children.length > 0) {
-              // Finding the latest child means finding the one with the maximum "position".
+              // Finding the latest child means finding the visible session having the maximum "position".
               const last_child = children[children.length-1];  // Not vetted by position yet
               const latest_child = children.reduce(reduceToMax, last_child);   // Now this is truly by position
               const target = app.route.tag(latest_child);
@@ -113,10 +123,10 @@ export default class IndexPage extends Page {
               !!!!!!! MAJOR BUG IN MITHRIL:  the "this" at this moment is the "this"
               that will be used by the view() method, but the route will spawn a separate "this"
               that will be sent to the next call to init().*/
-              // this.isMemberOfGroup = true; /// JUST AN EXPERIMENTY
+              // this.isMemberOfGroup = true; /// JUST AN EXPERIMENT
             }
           } else {
-            alert("This discussion group (ID=" + this.current_tag.data.id + ") has a damaged database (zero sessions).  Please contact Formed.org staff.")
+            alert("This discussion group (ID=" + this.current_tag.data.id + ") has zero visible sessions.  Please contact Formed.org staff or your group leader.")
           }
         }
       }
