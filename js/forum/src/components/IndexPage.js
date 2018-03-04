@@ -232,7 +232,7 @@ export default class IndexPage extends Page {
             </div>
             <div className="IndexPage-results-header IndexPage-results-child">
               <div className="session-name">
-                 Session {this.current_tag.data.attributes.position + 1}:&nbsp;
+                 Session {this.current_tag.sessionNumber}:&nbsp;
                  {this.current_tag.data.attributes.name}
                  <div className="literal-discussion">Discussion</div>
               </div>
