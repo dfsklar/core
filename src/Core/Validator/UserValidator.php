@@ -46,7 +46,7 @@ class UserValidator extends AbstractValidator
         return [
             'username' => [
                 'required',
-                'regex:/^[ a-z0-9_-]+$/i',
+                //DFSKLARD: too fascistic, we get formed.org usernames and want to support all such so NO WAY: 'regex:/^[ a-z0-9_-]+$/i',
                 // 'unique:users,username'.$idSuffix,
                 'min:3',
                 'max:30'
