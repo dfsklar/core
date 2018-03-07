@@ -1,11 +1,8 @@
 .App {
   position: relative !important;
-  padding-top: @header-height;
-  padding-bottom: 50px;
   overflow-x: hidden;
   min-height: 100vh;
-  padding-left: 5%;
-  padding-right: 5%;
+  padding: @header-height 20px 50px;
 
   @media @phone {
     padding-top: @header-height-phone;
@@ -348,6 +345,12 @@ h4 {
 
 .App-content {
   border-top: 1px solid @control-bg;
+  width: 1280px;
+  -webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 // On phones, the content area overlays the drawer, so we must give it a
