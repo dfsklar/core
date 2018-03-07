@@ -39,9 +39,14 @@ class UserRepository
      */
     public function findOrFail($id, User $actor = null)
     {
-        $query = User::where('id', $id);
-        if (! $query->first()) {
-            /*
+        if (($id != "U1") && (strlen($id) < 15)) {
+           $query = User::where('id', $id);
+	} else {
+           /*
+            * A LITTLE HISTORY:
+            * For some period before the Alpha Lent release in Mar of 2018,
+            * this was true:
+	     *
              * OK so this next stuff is weird.
              * I'm taking the full 32-character UID and truncating it to 28-char.
              * WHY?
@@ -51,8 +56,11 @@ class UserRepository
              * At some point, we should eliminate or repair all rows that are living with
              * the damaged UIDs and turn off this use of "like" that is obviously 
              * dangerous if two UIDs happen to be virtually identical.
-             */
-            $query = User::where('uid', 'like', substr($id, 0, 28)."%");
+	     *
+            * But this logic was removed on 07MAR2018 to ensure the new pool of users (first
+            * true customers) was not exposed to the risk of matching a different user.
+	    */
+           $query = User::where('uid', $id);
         }
         return $this->scopeVisibleTo($query, $actor)->firstOrFail();
     }
